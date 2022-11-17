@@ -38,6 +38,7 @@ import androidx.core.content.ContextCompat;
 import com.tencent.tinker.lib.library.TinkerLoadLibrary;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
+import com.tencent.tinker.lib.util.TinkerLog;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
@@ -66,12 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button loadPatchButton = (Button) findViewById(R.id.loadPatch);
 
-        loadPatchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk");
-            }
-        });
+        loadPatchEvent(loadPatchButton);
 
         Button loadLibraryButton = (Button) findViewById(R.id.loadLibrary);
 
@@ -117,6 +113,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                //  Log.d(TAG, "onClick: ---------Info --1");
                 showInfo(MainActivity.this);
+            }
+        });
+    }
+
+    private void loadPatchEvent(Button loadPatchButton) {
+        loadPatchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String patchLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/app-debug-patch_signed_7zip.apk";
+               // TinkerLog.d(TAG,"patchLocation: "+patchLocation);
+                TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), patchLocation);
             }
         });
     }
