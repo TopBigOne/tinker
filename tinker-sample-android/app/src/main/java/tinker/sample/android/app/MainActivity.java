@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         buildInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               //  Log.d(TAG, "onClick: ---------Info --1");
                 showInfo(MainActivity.this);
             }
         });

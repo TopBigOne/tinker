@@ -11,6 +11,7 @@ buildscript {
         } else {
             classpath 'com.android.tools.build:gradle:2.3.3'
         }
+        // TINKER_VERSION=1.9.14.18
         classpath("com.tencent.tinker:tinker-patch-gradle-plugin:${TINKER_VERSION}") {
             changing = TINKER_VERSION?.endsWith("-SNAPSHOT")
             exclude group: 'com.android.tools.build', module: 'gradle'
