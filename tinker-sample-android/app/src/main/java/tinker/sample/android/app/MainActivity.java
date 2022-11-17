@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "i am on onCreate classloader:" + MainActivity.class.getClassLoader().toString());
         //test resource change
         Log.e(TAG, "i am on onCreate string:" + getResources().getString(R.string.test_resource));
-//        Log.e(TAG, "i am on patch onCreate");
+        //        Log.e(TAG, "i am on patch onCreate");
 
         mTvMessage = findViewById(R.id.tv_message);
 
@@ -79,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 System.loadLibrary("stlport_shared");
 
                 // #method 2, for lib/armeabi, just use TinkerInstaller.loadLibrary
-//                TinkerLoadLibrary.loadArmLibrary(getApplicationContext(), "stlport_shared");
+                //                TinkerLoadLibrary.loadArmLibrary(getApplicationContext(), "stlport_shared");
 
                 // #method 3, load tinker patch library directly
-//                TinkerInstaller.loadLibraryFromTinker(getApplicationContext(), "assets/x86", "stlport_shared");
+                //                TinkerInstaller.loadLibraryFromTinker(getApplicationContext(), "assets/x86", "stlport_shared");
 
             }
         });
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         buildInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //  Log.d(TAG, "onClick: ---------Info --1");
+                //  Log.d(TAG, "onClick: ---------Info --1");
                 showInfo(MainActivity.this);
             }
         });
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String patchLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/app-debug-patch_signed_7zip.apk";
-               // TinkerLog.d(TAG,"patchLocation: "+patchLocation);
+                TinkerLog.d(TAG, "patchLocation: " + patchLocation);
                 TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), patchLocation);
             }
         });
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (!hasRequiredPermissions()) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         }
     }
 
@@ -150,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean showInfo(Context context) {
         // add more Build Info
-        final StringBuilder sb = new StringBuilder();
-        Tinker tinker = Tinker.with(getApplicationContext());
+        final StringBuilder sb     = new StringBuilder();
+        Tinker              tinker = Tinker.with(getApplicationContext());
         if (tinker.isTinkerLoaded()) {
             sb.append(String.format("[patch is loaded] \n"));
             sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.e(TAG, "i am on onResume");
-//        Log.e(TAG, "i am on patch onResume");
+        //        Log.e(TAG, "i am on patch onResume");
 
         super.onResume();
         Utils.setBackground(false);
