@@ -85,7 +85,8 @@
         android:layout_alignParentLeft="true"
         android:text="update a new buttton by hot fix"
         android:textAllCaps="false" />
-  <Button
+
+    <Button
         android:id="@+id/btn_new_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,7 +95,15 @@
         android:layout_alignParentLeft="true"
         android:text="update a new buttton by hot fix2"
         android:textAllCaps="false" />
-
+    <Button
+        android:id="@+id/btn_new_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_new_two"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="update a new buttton by hot fix55555"
+        android:textAllCaps="false" />
 
 
 </RelativeLayout>
