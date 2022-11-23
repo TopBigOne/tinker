@@ -30,6 +30,7 @@ import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_C
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_RESOURCES;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_SYSTEM_SERVICE;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_MZ_NIGHTMODE_USE_OF;
+import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_ATTACH_BASE_CONTEXT;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_BASE_CONTEXT_ATTACHED;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_CONFIGURATION_CHANGED;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_CREATE;
@@ -68,10 +69,20 @@ public final class TinkerApplicationInlineFence extends Handler {
 
     private void handleMessageImpl(Message msg) {
         switch (msg.what) {
+            case ACTION_ON_ATTACH_BASE_CONTEXT:
+
+                mAppLike.attachBaseContext((Context) msg.obj);
+
+                break;
+
+
+
             case ACTION_ON_BASE_CONTEXT_ATTACHED: {
                 mAppLike.onBaseContextAttached((Context) msg.obj);
                 break;
             }
+
+
             case ACTION_ON_CREATE: {
                 mAppLike.onCreate();
                 break;

@@ -116,6 +116,16 @@ public abstract class TinkerApplication extends Application {
         }
     }
 
+    protected void onAttachBaseContext(Context base) {
+        final long applicationStartElapsedTime = SystemClock.elapsedRealtime();
+        final long applicationStartMillisTime = System.currentTimeMillis();
+        mInlineFence = createInlineFence(this, tinkerFlags, delegateClassName,
+                tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime,
+                tinkerResultIntent);
+
+        TinkerInlineFenceAction.callOnAttachBaseContext(mInlineFence,base);
+    }
+
     private void loadTinker() {
         try {
             //reflect tinker loader, because loaderClass may be define by user!
@@ -180,11 +190,13 @@ public abstract class TinkerApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        onAttachBaseContext(base);
         final long applicationStartElapsedTime = SystemClock.elapsedRealtime();
         final long applicationStartMillisTime = System.currentTimeMillis();
         Thread.setDefaultUncaughtExceptionHandler(new TinkerUncaughtHandler(this));
         onBaseContextAttached(base, applicationStartElapsedTime, applicationStartMillisTime);
     }
+
 
     @Override
     public void onCreate() {

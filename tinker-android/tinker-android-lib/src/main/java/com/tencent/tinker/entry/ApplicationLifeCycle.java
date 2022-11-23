@@ -59,8 +59,14 @@ public interface ApplicationLifeCycle {
      */
     void onConfigurationChanged(Configuration newConfig);
 
+
+
+    void attachBaseContext(Context base);
+
     /**
      * Same as {@link Application#attachBaseContext(Context context)}.
      */
     void onBaseContextAttached(Context base);
+
+
 }

@@ -67,6 +67,11 @@ public class DefaultApplicationLike extends ApplicationLike {
     }
 
     @Override
+    public void attachBaseContext(Context base) {
+        ShareTinkerLog.d(TAG, "attachBaseContext:");
+    }
+
+    @Override
     public void onBaseContextAttached(Context base) {
         ShareTinkerLog.d(TAG, "onBaseContextAttached:");
     }
