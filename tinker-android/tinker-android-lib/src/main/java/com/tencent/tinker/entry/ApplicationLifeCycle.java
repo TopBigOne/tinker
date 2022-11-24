@@ -61,7 +61,7 @@ public interface ApplicationLifeCycle {
 
 
 
-    void attachBaseContext(Context base);
+    void onAttachBaseContext(Context base);
 
     /**
      * Same as {@link Application#attachBaseContext(Context context)}.

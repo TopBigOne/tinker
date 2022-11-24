@@ -22,6 +22,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * Created by tangyinsheng on 2019-11-05.
@@ -41,6 +42,7 @@ public final class TinkerInlineFenceAction {
     public static final int ACTION_MZ_NIGHTMODE_USE_OF = 12;
     // attachBaseContext
     public static final int ACTION_ON_ATTACH_BASE_CONTEXT = 13;
+    private static final String TAG = "TinkerInlineFenceAction : ";
 
 
     static void callOnBaseContextAttached(Handler inlineFence, Context context) {
@@ -61,6 +63,7 @@ public final class TinkerInlineFenceAction {
      * @param context
      */
      static void callOnAttachBaseContext(Handler inlineFence, Context context) {
+         Log.d(TAG, "callOnAttachBaseContext: invoke");
         Message msg = null;
         try {
             msg = Message.obtain(inlineFence, ACTION_ON_ATTACH_BASE_CONTEXT, context);

@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.tencent.tinker.anno.Keep;
 import com.tencent.tinker.loader.TinkerLoader;
@@ -41,6 +42,7 @@ import java.lang.reflect.Method;
  * Created by zhangshaowen on 16/3/8.
  */
 public abstract class TinkerApplication extends Application {
+    private static final String TAG = "TinkerApplication: ";
     private static final String INTENT_PATCH_EXCEPTION = ShareIntentUtil.INTENT_PATCH_EXCEPTION;
     private static final String TINKER_LOADER_METHOD = "tryLoad";
 
@@ -117,6 +119,7 @@ public abstract class TinkerApplication extends Application {
     }
 
     protected void onAttachBaseContext(Context base) {
+        Log.d(TAG, "onAttachBaseContext: ");
         final long applicationStartElapsedTime = SystemClock.elapsedRealtime();
         final long applicationStartMillisTime = System.currentTimeMillis();
         mInlineFence = createInlineFence(this, tinkerFlags, delegateClassName,

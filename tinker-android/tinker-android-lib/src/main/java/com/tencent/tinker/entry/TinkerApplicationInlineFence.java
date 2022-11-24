@@ -22,6 +22,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+
 import com.tencent.tinker.anno.Keep;
 
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_ASSETS;
@@ -43,6 +45,7 @@ import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_TR
  */
 @Keep
 public final class TinkerApplicationInlineFence extends Handler {
+    private static final String TAG = "TinkerApplicationInline: ";
     private final ApplicationLike mAppLike;
 
     public TinkerApplicationInlineFence(ApplicationLike appLike) {
@@ -68,21 +71,16 @@ public final class TinkerApplicationInlineFence extends Handler {
     }
 
     private void handleMessageImpl(Message msg) {
+        Log.d(TAG, "handleMessageImpl: msg.what : "+msg.what);
         switch (msg.what) {
             case ACTION_ON_ATTACH_BASE_CONTEXT:
-
-                mAppLike.attachBaseContext((Context) msg.obj);
-
+                mAppLike.onAttachBaseContext((Context) msg.obj);
                 break;
-
-
 
             case ACTION_ON_BASE_CONTEXT_ATTACHED: {
                 mAppLike.onBaseContextAttached((Context) msg.obj);
                 break;
             }
-
-
             case ACTION_ON_CREATE: {
                 mAppLike.onCreate();
                 break;
