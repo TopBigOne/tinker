@@ -71,7 +71,6 @@ public final class TinkerApplicationInlineFence extends Handler {
     }
 
     private void handleMessageImpl(Message msg) {
-        Log.d(TAG, "handleMessageImpl: msg.what : "+msg.what);
         switch (msg.what) {
             case ACTION_ON_ATTACH_BASE_CONTEXT:
                 mAppLike.onAttachBaseContext((Context) msg.obj);

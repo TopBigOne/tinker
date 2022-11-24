@@ -1,6 +1,7 @@
 package com.tencent.tinker.loader;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.tencent.tinker.anno.Keep;
 
@@ -12,7 +13,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import dalvik.system.BaseDexClassLoader;
 import dalvik.system.PathClassLoader;
 
 /**
@@ -21,6 +21,7 @@ import dalvik.system.PathClassLoader;
 @Keep
 @SuppressLint("NewApi")
 public final class TinkerClassLoader extends PathClassLoader {
+    private static final String TAG = "TinkerClassLoader： ";
     private final ClassLoader mOriginAppClassLoader;
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
@@ -31,6 +32,7 @@ public final class TinkerClassLoader extends PathClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
+        Log.w(TAG, "invoke findClass");
         Class<?> cl = null;
         try {
             cl = super.findClass(name);
@@ -39,9 +41,17 @@ public final class TinkerClassLoader extends PathClassLoader {
         }
         if (cl != null) {
             return cl;
-        } else {
+        }else {
             return mOriginAppClassLoader.loadClass(name);
         }
+
+//
+//        if("com.yxl.fish.loader.p.ProviderN1".equals(name)){
+//            Log.w(TAG, "findClass: load the plugin position by super class loader");
+//
+//            return super.findClass(name);
+//        }
+//        return mOriginAppClassLoader.loadClass(name);
     }
 
     @Override
@@ -62,12 +72,7 @@ public final class TinkerClassLoader extends PathClassLoader {
 
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        @SuppressWarnings("unchecked")
-        final Enumeration<URL>[] resources = (Enumeration<URL>[]) new Enumeration<?>[] {
-                Object.class.getClassLoader().getResources(name),
-                findResources(name),
-                mOriginAppClassLoader.getResources(name)
-        };
+        @SuppressWarnings("unchecked") final Enumeration<URL>[] resources = (Enumeration<URL>[]) new Enumeration<?>[]{Object.class.getClassLoader().getResources(name), findResources(name), mOriginAppClassLoader.getResources(name)};
         return new CompoundEnumeration<>(resources);
     }
 

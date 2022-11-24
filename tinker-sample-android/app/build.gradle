@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 dependencies {
+
+//    implementation("com.tinkerpatch.sdk:tinkerpatch-android-sdk:1.2.5")
     if (is_gradle_3()) {
         implementation fileTree(dir: 'libs', include: ['*.jar'])
         testImplementation 'junit:junit:4.12'
@@ -27,6 +29,8 @@ dependencies {
         provided("com.tencent.tinker:tinker-android-anno-support:${TINKER_VERSION}") { changing = true }
 
         compile "androidx.multidex:multidex:2.0.1"
+
+
 
         //use to test multiDex
 //    compile group: 'com.google.guava', name: 'guava', version: '19.0'
@@ -142,6 +146,7 @@ android {
     }
 }
 
+
 def bakPath = file("${buildDir}/bakApk/")
 
 /**
@@ -155,13 +160,13 @@ ext {
 
     //for normal build
     //old apk file to build patch apk
-    tinkerOldApkPath = "${bakPath}/app-debug-1117-23-58-57.apk"
+    tinkerOldApkPath = "${bakPath}/app-debug-1120-17-06-33.apk"
 
     //proguard mapping file to build patch apk
     tinkerApplyMappingPath = "${bakPath}/app-debug-1018-17-32-47-mapping.txt"
 
     //resource R.txt to build patch apk, must input if there is resource changed
-    tinkerApplyResourcePath = "${bakPath}/app-debug-1117-23-58-57-R.txt"
+    tinkerApplyResourcePath = "${bakPath}/app-debug-1120-17-06-33-R.txt"
 
     //only use for build all flavor, if not, just ignore this field
     tinkerBuildFlavorDirectory = "${bakPath}/app-1018-17-32-47"

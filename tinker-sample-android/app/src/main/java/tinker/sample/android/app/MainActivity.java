@@ -35,7 +35,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+//
+//import com.tencent.tinker.lib.library.TinkerLoadLibrary;
+//import com.tencent.tinker.lib.tinker.Tinker;
+//import com.tencent.tinker.lib.tinker.TinkerInstaller;
+//import com.tencent.tinker.lib.util.TinkerLog;
 import com.tencent.tinker.lib.library.TinkerLoadLibrary;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
@@ -46,7 +50,11 @@ import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 import tinker.sample.android.R;
 import tinker.sample.android.util.Utils;
 
+
+
 public class MainActivity extends AppCompatActivity {
+
+
     private static final String TAG = "Tinker.MainActivity";
 
     private TextView mTvMessage = null;
@@ -63,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         //        Log.e(TAG, "i am on patch onCreate");
 
         mTvMessage = findViewById(R.id.tv_message);
+
+
 
         askForRequiredPermissions();
 

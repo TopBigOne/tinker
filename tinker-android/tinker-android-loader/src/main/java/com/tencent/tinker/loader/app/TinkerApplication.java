@@ -119,13 +119,7 @@ public abstract class TinkerApplication extends Application {
     }
 
     protected void onAttachBaseContext(Context base) {
-        Log.d(TAG, "onAttachBaseContext: ");
-        final long applicationStartElapsedTime = SystemClock.elapsedRealtime();
-        final long applicationStartMillisTime = System.currentTimeMillis();
-        mInlineFence = createInlineFence(this, tinkerFlags, delegateClassName,
-                tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime,
-                tinkerResultIntent);
-
+        Log.d(TAG, "invoke onAttachBaseContext: ");
         TinkerInlineFenceAction.callOnAttachBaseContext(mInlineFence,base);
     }
 
@@ -167,6 +161,7 @@ public abstract class TinkerApplication extends Application {
             inlineFenceCtor.setAccessible(true);
             return (Handler) inlineFenceCtor.newInstance(appLike);
         } catch (Throwable thr) {
+            Log.e(TAG, "createInlineFence: ERROR：" + thr.getMessage());
             throw new TinkerRuntimeException("createInlineFence failed", thr);
         }
     }
@@ -175,9 +170,12 @@ public abstract class TinkerApplication extends Application {
         try {
             loadTinker();
             mCurrentClassLoader = base.getClassLoader();
+
             mInlineFence = createInlineFence(this, tinkerFlags, delegateClassName,
                     tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime,
                     tinkerResultIntent);
+
+            onAttachBaseContext(base);
             TinkerInlineFenceAction.callOnBaseContextAttached(mInlineFence, base);
             //reset save mode
             if (useSafeMode) {
@@ -193,10 +191,13 @@ public abstract class TinkerApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        onAttachBaseContext(base);
+
         final long applicationStartElapsedTime = SystemClock.elapsedRealtime();
         final long applicationStartMillisTime = System.currentTimeMillis();
         Thread.setDefaultUncaughtExceptionHandler(new TinkerUncaughtHandler(this));
+
+
+
         onBaseContextAttached(base, applicationStartElapsedTime, applicationStartMillisTime);
     }
 

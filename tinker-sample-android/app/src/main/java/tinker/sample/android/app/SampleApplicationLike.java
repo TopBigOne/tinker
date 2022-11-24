@@ -56,7 +56,7 @@ import tinker.sample.android.util.TinkerManager;
  * Created by zhangshaowen on 16/3/17.
  */
 @SuppressWarnings("unused")
-@DefaultLifeCycle(application = "tinker.sample.android.app.SampleApplication",
+@DefaultLifeCycle(application = "tinker.sample.android.app.CoreApplication",
                   flags = ShareConstants.TINKER_ENABLE_ALL,
                   loadVerifyFlag = false)
 public class SampleApplicationLike extends DefaultApplicationLike {
