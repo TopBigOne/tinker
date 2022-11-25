@@ -160,8 +160,17 @@ public class DefaultPatchReporter implements PatchReporter {
      */
     @Override
     public void onPatchResult(File patchFile, boolean success, long cost) {
-        ShareTinkerLog.i(TAG, "patchReporter onPatchResult: patch all result path: %s, success: %b, cost: %d",
-            patchFile.getAbsolutePath(), success, cost);
+        ShareTinkerLog.i(TAG, "|-------------------------------------patch reporter on patch result START--------------------------------------------------↓");
+        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "| patch all result path: %s, success: %b, cost: %d", patchFile.getAbsolutePath(), success, cost);
+        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "|-------------------------------------patch reporter on patch result END----------------------------------------------------↑");
+
+
+
+
         // if should retry don't delete the temp file
         if (!shouldRetry) {
             UpgradePatchRetry.getInstance(context).onPatchServiceResult();
