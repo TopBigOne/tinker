@@ -45,6 +45,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +88,15 @@ public class DexDiffPatchInternal extends BasePatchInternal {
         boolean result = patchDexExtractViaDexDiff(context, patchVersionDirectory, dexMeta, patchFile, patchResult);
         long cost = SystemClock.elapsedRealtime() - begin;
         patchResult.dexCostTime = cost;
-        ShareTinkerLog.i(TAG, "recover dex result:%b, cost:%d", result, cost);
+
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------------------------------↓");
+        ShareTinkerLog.i(TAG, "| recover dex result:%b, cost:%d", result, cost);
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------------------------------↑");
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.iBlack(TAG);
+
         return result;
     }
 
@@ -727,7 +736,9 @@ public class DexDiffPatchInternal extends BasePatchInternal {
                             zis = new ZipInputStream(oldDexStream);
                             ZipEntry entry;
                             while ((entry = zis.getNextEntry()) != null) {
-                                if (ShareConstants.DEX_IN_JAR.equals(entry.getName())) break;
+                                if (ShareConstants.DEX_IN_JAR.equals(entry.getName())){
+                                    break;
+                                }
                             }
                             if (entry == null) {
                                 throw new TinkerRuntimeException("can't recognize zip dex format file:" + patchedDexFile.getAbsolutePath());

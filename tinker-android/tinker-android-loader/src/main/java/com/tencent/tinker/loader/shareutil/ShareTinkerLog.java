@@ -26,7 +26,8 @@ import java.lang.reflect.Constructor;
  * Created by zhangshaowen on 16/3/17.
  */
 public class ShareTinkerLog {
-    private static final String TAG = "Tinker.ShareTinkerLog";
+    private static final String TAG   = "Tinker.ShareTinkerLog";
+    private static final String BLACK = "                                                           ";
 
     public static final int FN_LOG_PRINT_STACKTRACE = 0xFA1;
     public static final int FN_LOG_PRINT_PENDING_LOGS = 0xFA2;
@@ -137,6 +138,19 @@ public class ShareTinkerLog {
     public static void e(final String tag, final String fmt, final Object... values) {
         printLog(Log.ERROR, tag, fmt, values);
     }
+
+    public static void eBlack(final String tag) {
+        printLog(Log.ERROR, tag, BLACK);
+    }
+
+    public static void iBlack(final String tag) {
+        printLog(Log.INFO, tag, BLACK);
+    }
+
+    public static void wBlack(final String tag) {
+        printLog(Log.WARN, tag, BLACK);
+    }
+
 
     public static void printErrStackTrace(String tag, Throwable thr, final String format, final Object... values) {
         printLog(tag, thr, format, values);
