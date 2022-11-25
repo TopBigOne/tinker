@@ -79,6 +79,7 @@ public class SharePatchFileUtil {
     }
 
     public static File getPatchInfoFile(String patchDirectory) {
+        ShareTinkerLog.w(TAG, "getPatchInfoFile:start create the patch.info file , and the file path is " + (patchDirectory + "/" + ShareConstants.PATCH_INFO_NAME));
         return new File(patchDirectory + "/" + ShareConstants.PATCH_INFO_NAME);
     }
 

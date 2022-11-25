@@ -352,6 +352,7 @@ public class Tinker {
                 return;
             }
             this.patchInfoFile = SharePatchFileUtil.getPatchInfoFile(patchDirectory.getAbsolutePath());
+            ShareTinkerLog.w(TAG, "Builder : start build  patchInfoFile ,and the path is : %s", patchInfoFile.getAbsolutePath());
             this.patchInfoLockFile = SharePatchFileUtil.getPatchInfoLockFile(patchDirectory.getAbsolutePath());
             ShareTinkerLog.w(TAG, "tinker patch directory: %s", patchDirectory);
         }

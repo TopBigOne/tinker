@@ -87,7 +87,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
 
         //check patch directory whether exist
         if (!patchDirectoryFile.exists()) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:patch dir not exist:" + patchDirectoryPath);
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:patch dir not exist:" + patchDirectoryPath+ ". just return");
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_DIRECTORY_NOT_EXIST);
             return;
         }
@@ -96,7 +96,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
         File patchInfoFile = SharePatchFileUtil.getPatchInfoFile(patchDirectoryPath);
         //check patch info file whether exist
         if (!patchInfoFile.exists()) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:patch info not exist:" + patchInfoFile.getAbsolutePath());
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles: patch info not exist:" + patchInfoFile.getAbsolutePath()+ ", just return");
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_INFO_NOT_EXIST);
             return;
         }
@@ -105,6 +105,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
         File patchInfoLockFile = SharePatchFileUtil.getPatchInfoLockFile(patchDirectoryPath);
         patchInfo = SharePatchInfo.readAndCheckPropertyWithLock(patchInfoFile, patchInfoLockFile);
         if (patchInfo == null) {
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:patch the  is NULL,just return");
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_INFO_CORRUPTED);
             return;
         }
@@ -121,7 +122,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
 
         if (oldVersion == null || newVersion == null || oatDex == null) {
             //it is nice to clean patch
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchInfoCorrupted");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchInfoCorrupted, the patch is Corrupted, need to clean it ,just return");
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_INFO_CORRUPTED);
             return;
         }
@@ -207,7 +208,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             version = newVersion;
         }
         if (ShareTinkerInternals.isNullOrNil(version)) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:version is blank, wait main process to restart");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:version is blank, wait main process to restart,just return");
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_INFO_BLANK);
             return;
         }
@@ -226,7 +227,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
         File patchVersionDirectoryFile = new File(patchVersionDirectory);
 
         if (!patchVersionDirectoryFile.exists()) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchVersionDirectoryNotFound");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchVersionDirectoryNotFound,just return");
             //we may delete patch info file
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_VERSION_DIRECTORY_NOT_EXIST);
             return;
@@ -237,7 +238,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
         File patchVersionFile = (patchVersionFileRelPath != null ? new File(patchVersionDirectoryFile.getAbsolutePath(), patchVersionFileRelPath) : null);
 
         if (!SharePatchFileUtil.isLegalFile(patchVersionFile)) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchVersionFileNotFound");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchVersionFileNotFound,just return");
             //we may delete patch info file
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_VERSION_FILE_NOT_EXIST);
             return;
@@ -246,7 +247,8 @@ public class TinkerLoader extends AbstractTinkerLoader {
         ShareSecurityCheck securityCheck = new ShareSecurityCheck(app);
         int returnCode = ShareTinkerInternals.checkTinkerPackage(app, tinkerFlag, patchVersionFile, securityCheck);
         if (returnCode != ShareConstants.ERROR_PACKAGE_CHECK_OK) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:checkTinkerPackage");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles: find the original  ERROR_PACKAGE_CHECK code in class : ShareConstants#ERROR_PACKAGE_CHECK_OK");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:checkTinkerPackage the check result code is :" + returnCode + ", just return.");
             resultIntent.putExtra(ShareIntentUtil.INTENT_PATCH_PACKAGE_PATCH_CHECK, returnCode);
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_PACKAGE_CHECK_FAIL);
             return;
@@ -262,7 +264,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             boolean dexCheck = TinkerDexLoader.checkComplete(patchVersionDirectory, securityCheck, oatDex, resultIntent);
             if (!dexCheck) {
                 //file not found, do not load patch
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:dex check fail");
+                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:dex check fail, just return.");
                 return;
             }
         }
@@ -272,7 +274,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             boolean arkHotCheck = TinkerArkHotLoader.checkComplete(patchVersionDirectory, securityCheck, resultIntent);
             if (!arkHotCheck) {
                 // file not found, do not load patch
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:dex check fail");
+                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:dex check fail, just return.");
                 return;
             }
         }
@@ -285,7 +287,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             boolean libCheck = TinkerSoLoader.checkComplete(patchVersionDirectory, securityCheck, resultIntent);
             if (!libCheck) {
                 //file not found, do not load patch
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:native lib check fail");
+                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:native lib check fail , just return.");
                 return;
             }
         }
@@ -297,7 +299,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             boolean resourceCheck = TinkerResourceLoader.checkComplete(app, patchVersionDirectory, securityCheck, resultIntent);
             if (!resourceCheck) {
                 //file not found, do not load patch
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:resource check fail");
+                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:resource check fail, just return.");
                 return;
             }
         }
@@ -335,13 +337,15 @@ public class TinkerLoader extends AbstractTinkerLoader {
 
                 resultIntent.putExtra(ShareIntentUtil.INTENT_PATCH_EXCEPTION, new TinkerRuntimeException("checkSafeModeCount fail"));
                 ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_UNCAUGHT_EXCEPTION);
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:checkSafeModeCount fail, patch was deleted.");
+                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:checkSafeModeCount fail, patch was deleted., just return.");
                 return;
             } else {
                 ShareTinkerLog.w(TAG, "tryLoadPatchFiles:checkSafeModeCount fail, but we are not in main process, mark the patch to be deleted and continue load patch.");
                 ShareTinkerInternals.cleanPatch(app);
             }
         }
+
+        ShareTinkerLog.i(TAG, "tryLoadPatchFiles:now we can load patch jar. 666----> niubility");
 
         //now we can load patch jar
         if (!isArkHotRuning && isEnabledForDex) {
@@ -376,6 +380,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             }
         }
 
+        ShareTinkerLog.i(TAG, "tryLoadPatchFiles:now we can load patch resource. 666----> niubility*2");
         //now we can load patch resource
         if (isEnabledForResource) {
             boolean loadTinkerResources = TinkerResourceLoader.loadTinkerResources(app, patchVersionDirectory, resultIntent);
@@ -391,7 +396,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
         }
 
         if (!AppInfoChangedBlocker.tryStart(app)) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:AppInfoChangedBlocker install fail.");
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:AppInfoChangedBlocker install fail. just return");
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_BAIL_HACK_FAILURE);
             return;
         }
@@ -402,16 +407,18 @@ public class TinkerLoader extends AbstractTinkerLoader {
             //update old version to new
             if (!SharePatchInfo.rewritePatchInfoFileWithLock(patchInfoFile, patchInfo, patchInfoLockFile)) {
                 ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_REWRITE_PATCH_INFO_FAIL);
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onReWritePatchInfoCorrupted");
+                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onReWritePatchInfoCorrupted,just return");
                 return;
             }
 
+            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:start kill main process.");
             ShareTinkerInternals.killProcessExceptMain(app);
         }
 
+        ShareTinkerLog.i(TAG, "tryLoadPatchFiles:all is ok. 666----> niubility*3");
         //all is ok!
         ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_OK);
-        ShareTinkerLog.i(TAG, "tryLoadPatchFiles: load end, ok!");
+        ShareTinkerLog.i(TAG, "tryLoadPatchFiles: load end, ok! 666----> niubility*4");
     }
 
     private boolean checkSafeModeCount(TinkerApplication application) {
