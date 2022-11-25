@@ -160,17 +160,17 @@ public class DefaultPatchReporter implements PatchReporter {
      */
     @Override
     public void onPatchResult(File patchFile, boolean success, long cost) {
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "|-------------------------------------patch reporter on patch result START--------------------------------------------------↓");
-        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
-        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
-        ShareTinkerLog.i(TAG, "| patch all result path: %s, success: %b, cost: %d", patchFile.getAbsolutePath(), success, cost);
-        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
-        ShareTinkerLog.i(TAG, "|---------------------------------------------------------------------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "|                                                                                                                           |");
+        ShareTinkerLog.i(TAG, "|                                                                                                                           |");
+        ShareTinkerLog.i(TAG, "| patch all result path: %s,  is success: %b, cost: %d", patchFile.getAbsolutePath(), success, cost);
+        ShareTinkerLog.i(TAG, "|                                                                                                                           |");
+        ShareTinkerLog.i(TAG, "|                                                                                                                           |");
         ShareTinkerLog.i(TAG, "|-------------------------------------patch reporter on patch result END----------------------------------------------------↑");
-
-
-
-
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.iBlack(TAG);
         // if should retry don't delete the temp file
         if (!shouldRetry) {
             UpgradePatchRetry.getInstance(context).onPatchServiceResult();
