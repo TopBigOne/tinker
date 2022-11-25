@@ -207,7 +207,11 @@ public class UpgradePatch extends AbstractPatch {
         // patch apply disable when we apply it successfully previously.
         UpgradePatchRetry.getInstance(context).onPatchResetMaxCheck(patchMd5);
 
-        ShareTinkerLog.w(TAG, "UpgradePatch tryPatch: done, it is ok");
+        ShareTinkerLog.i(TAG, "|------------------Upgrade Patch Info------------------------↓");
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "|          UpgradePatch tryPatch: done, it is ok");
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------|");
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------↑");
         return true;
     }
 

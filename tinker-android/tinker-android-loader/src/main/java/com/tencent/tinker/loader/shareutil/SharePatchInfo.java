@@ -120,6 +120,10 @@ public class SharePatchInfo {
     }
 
     private static SharePatchInfo readAndCheckProperty(File pathInfoFile) {
+        if(pathInfoFile!=null){
+            boolean exists = pathInfoFile.exists();
+            ShareTinkerLog.i(TAG, "readAndCheckProperty, the  pathInfoFile  exist status is :" + exists);
+        }
         boolean isReadPatchSuccessful = false;
         int numAttempts = 0;
         String oldVer = null;
@@ -149,7 +153,9 @@ public class SharePatchInfo {
                 final String isRemoveInterpretOATDirStr = properties.getProperty(IS_REMOVE_INTERPRET_OAT_DIR);
                 isRemoveInterpretOATDir = (isRemoveInterpretOATDirStr != null && !isRemoveInterpretOATDirStr.isEmpty() && !"0".equals(isRemoveInterpretOATDirStr));
             } catch (IOException e) {
-                ShareTinkerLog.w(TAG, "read property failed, e:" + e);
+                ShareTinkerLog.e(TAG, "|------------------------------------------------------------------------------------↓");
+                ShareTinkerLog.e(TAG, "| read property failed, ERROR :" + e);
+                ShareTinkerLog.e(TAG, "|------------------------------------------------------------------------------------↑");
             } finally {
                 SharePatchFileUtil.closeQuietly(inputStream);
             }
@@ -185,7 +191,8 @@ public class SharePatchInfo {
         if (ShareTinkerInternals.isNullOrNil(info.oatDir)) {
             info.oatDir = DEFAULT_DIR;
         }
-        ShareTinkerLog.i(TAG, "rewritePatchInfoFile file path:"
+        ShareTinkerLog.i(TAG," | rewritePatchInfoFile ----------------------------------------------------------------------------------------------↓");
+        ShareTinkerLog.i(TAG, "| rewritePatchInfoFile file path:"
             + pathInfoFile.getAbsolutePath()
             + " , oldVer:"
             + info.oldVersion
@@ -203,6 +210,7 @@ public class SharePatchInfo {
             + (info.isRemoveInterpretOATDir ? 1 : 0)
             + ", stack: " + android.util.Log.getStackTraceString(new Throwable())
         );
+        ShareTinkerLog.i(TAG,"| rewritePatchInfoFile ----------------------------------------------------------------------------------------------↑");
 
         boolean isWritePatchSuccessful = false;
         int numAttempts = 0;
