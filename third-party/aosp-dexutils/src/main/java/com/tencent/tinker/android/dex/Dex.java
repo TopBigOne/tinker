@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
+import java.util.function.LongToDoubleFunction;
 import java.util.zip.Adler32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -63,6 +64,7 @@ public final class Dex {
     private ByteBuffer data;
     private int nextSectionStart = 0;
     private byte[] signature = null;
+    private static final String TAG = "Tinker.Dex";
 
     /**
      * Creates a new dex that reads from {@code data}. It is an error to modify
@@ -221,6 +223,12 @@ public final class Dex {
     }
 
     public Section openSection(TableOfContents.Section tocSec) {
+        System.out.println(TAG+" ");
+        System.out.println(TAG+" |------------------------------------------------------------------------------------↓");
+        System.out.println(TAG+" | start invoke openSection() ");
+        System.out.println(TAG+" |------------------------------------------------------------------------------------↑");
+        System.out.println(TAG+" ");
+
         int position = tocSec.off;
         if (position < 0 || position >= data.capacity()) {
             throw new IllegalArgumentException(
@@ -229,7 +237,17 @@ public final class Dex {
         }
         ByteBuffer sectionData = data.duplicate();
         sectionData.order(ByteOrder.LITTLE_ENDIAN); // necessary?
-        sectionData.position(position);
+
+        try {
+            sectionData.position(position);
+        } catch (Exception e) {
+            System.err.println(TAG+" ");
+            System.err.println(TAG+" |--------openSection Exception start------------------------------------------------------------------------↓");
+            System.err.println(TAG+" | sectionData.position(position)  Exception: "+e.getMessage());
+            System.err.println(TAG+" |--------openSection Exception end---------------------------------------------------------------------------↑");
+            System.err.println(TAG+" ");
+            e.printStackTrace();
+        }
         sectionData.limit(position + tocSec.byteCount);
         return new Section("section", sectionData);
     }
