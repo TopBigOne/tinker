@@ -231,7 +231,14 @@ public class SharePatchInfo {
                 String comment = "from old version:" + info.oldVersion + " to new version:" + info.newVersion;
                 newProperties.store(outputStream, comment);
             } catch (Exception e) {
+                ShareTinkerLog.e(TAG, "|------------------------rewrite Patch Info File ERROR INFO START------------------------");
+                ShareTinkerLog.e(TAG, "| rewritePatchInfoFile#write property failed, and the ERROR is :" + e.getMessage());
+                ShareTinkerLog.e(TAG, "|------------------------rewrite Patch Info File ERROR INFO END--------------------------");
+                ShareTinkerLog.w(TAG, "");
+                ShareTinkerLog.w(TAG, "");
                 ShareTinkerLog.w(TAG, "write property failed, e:" + e);
+                ShareTinkerLog.w(TAG, "");
+                ShareTinkerLog.w(TAG, "");
             } finally {
                 SharePatchFileUtil.closeQuietly(outputStream);
             }
@@ -240,7 +247,10 @@ public class SharePatchInfo {
 
             isWritePatchSuccessful = tempInfo != null && tempInfo.oldVersion.equals(info.oldVersion) && tempInfo.newVersion.equals(info.newVersion);
             if (!isWritePatchSuccessful) {
-                pathInfoFile.delete();
+                ShareTinkerLog.e(TAG, "rewritePatchInfoFile# because of write patch info file in failure , It will be deleted.");
+                boolean deleteResult = pathInfoFile.delete();
+                ShareTinkerLog.e(TAG, "rewritePatchInfoFile# the delete the patch info file result is : " + deleteResult);
+
             }
         }
         return isWritePatchSuccessful;
