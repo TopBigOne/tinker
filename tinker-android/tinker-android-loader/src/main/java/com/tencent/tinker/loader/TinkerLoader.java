@@ -109,6 +109,8 @@ public class TinkerLoader extends AbstractTinkerLoader {
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_INFO_CORRUPTED);
             return;
         }
+        boolean exists = patchInfoFile.exists();
+        ShareTinkerLog.w(TAG, "tryLoadPatchFiles, the  patchInfoFile  exist status is :" + exists);
 
         final boolean isProtectedApp = patchInfo.isProtectedApp;
         resultIntent.putExtra(ShareIntentUtil.INTENT_IS_PROTECTED_APP, isProtectedApp);

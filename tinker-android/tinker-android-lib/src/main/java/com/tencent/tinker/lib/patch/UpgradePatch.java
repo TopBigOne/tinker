@@ -86,6 +86,9 @@ public class UpgradePatch extends AbstractPatch {
         File patchInfoLockFile = SharePatchFileUtil.getPatchInfoLockFile(patchDirectory);
         File patchInfoFile = SharePatchFileUtil.getPatchInfoFile(patchDirectory);
 
+        boolean exists = patchInfoFile.exists();
+        ShareTinkerLog.w(TAG, "tryPatch, the  patchInfoFile  exist status is :" + exists);
+
         final Map<String, String> pkgProps = signatureCheck.getPackagePropertiesIfPresent();
         if (pkgProps == null) {
             ShareTinkerLog.e(TAG, "UpgradePatch packageProperties is null, do we process a valid patch apk ?");

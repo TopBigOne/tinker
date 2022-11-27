@@ -69,7 +69,7 @@ public class SharePatchInfo {
         }
 
         boolean exists = pathInfoFile.exists();
-        ShareTinkerLog.i(TAG, "readAndCheckPropertyWithLock, the  pathInfoFile  exist status is :" + exists);
+        ShareTinkerLog.w(TAG, "readAndCheckPropertyWithLock, the  pathInfoFile  exist status is :" + exists);
         File lockParentFile = lockFile.getParentFile();
         if (!lockParentFile.exists()) {
             lockParentFile.mkdirs();
