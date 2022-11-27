@@ -1,7 +1,11 @@
 package com.tencent.tinker.loader;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
+import com.qihoo360.loader2.PMF;
+import com.qihoo360.replugin.RePlugin;
+import com.qihoo360.replugin.helper.LogDebug;
 import com.tencent.tinker.anno.Keep;
 
 import java.io.File;
@@ -12,7 +16,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import dalvik.system.BaseDexClassLoader;
 import dalvik.system.PathClassLoader;
 
 /**
@@ -21,6 +24,7 @@ import dalvik.system.PathClassLoader;
 @Keep
 @SuppressLint("NewApi")
 public final class TinkerClassLoader extends PathClassLoader {
+    private static final String TAG = "Tinker.ClassLoader";
     private final ClassLoader mOriginAppClassLoader;
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
@@ -30,7 +34,28 @@ public final class TinkerClassLoader extends PathClassLoader {
     }
 
     @Override
+    protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
+        Class<?> c;
+        c = PMF.loadClass(className, resolve);
+        if (c != null) {
+            return c;
+        } else {
+            try {
+                c = this.mOriginAppClassLoader.loadClass(className);
+                if (LogDebug.LOG && RePlugin.getConfig().isPrintDetailLog()) {
+                    LogDebug.d("RePluginClassLoader", "loadClass: load other class, cn=" + className);
+                }
+
+                return c;
+            } catch (Throwable var5) {
+                return super.loadClass(className, resolve);
+            }
+        }
+    }
+
+    @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
+        Log.d(TAG, "findClass: ");
         Class<?> cl = null;
         try {
             cl = super.findClass(name);
