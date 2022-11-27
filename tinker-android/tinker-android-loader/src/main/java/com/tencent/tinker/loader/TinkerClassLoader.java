@@ -2,11 +2,16 @@ package com.tencent.tinker.loader;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+//
+//import com.qihoo360.loader2.PMF;
+//import com.qihoo360.replugin.RePlugin;
+//import com.qihoo360.replugin.helper.LogDebug;
 
 import com.qihoo360.loader2.PMF;
 import com.qihoo360.replugin.RePlugin;
 import com.qihoo360.replugin.helper.LogDebug;
 import com.tencent.tinker.anno.Keep;
+import com.tencent.tinker.loader.shareutil.ShareTinkerLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.LongToDoubleFunction;
 
 import dalvik.system.PathClassLoader;
 
@@ -35,6 +41,7 @@ public final class TinkerClassLoader extends PathClassLoader {
 
     @Override
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
+        ShareTinkerLog.w(TAG, " start invoke loadClass.");
         Class<?> c;
         c = PMF.loadClass(className, resolve);
         if (c != null) {
@@ -43,7 +50,8 @@ public final class TinkerClassLoader extends PathClassLoader {
             try {
                 c = this.mOriginAppClassLoader.loadClass(className);
                 if (LogDebug.LOG && RePlugin.getConfig().isPrintDetailLog()) {
-                    LogDebug.d("RePluginClassLoader", "loadClass: load other class, cn=" + className);
+
+                    ShareTinkerLog.w(TAG," 360-RePluginClassLoader", "loadClass: load other class, cn : " + className);
                 }
 
                 return c;
@@ -55,7 +63,7 @@ public final class TinkerClassLoader extends PathClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        Log.d(TAG, "findClass: ");
+        ShareTinkerLog.w(TAG, " start invoke findClass.");
         Class<?> cl = null;
         try {
             cl = super.findClass(name);
