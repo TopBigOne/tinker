@@ -160,7 +160,7 @@ public class SharePatchInfo {
             } catch (IOException e) {
                 ShareTinkerLog.eBlack(TAG);
                 ShareTinkerLog.e(TAG, "|----------------IOException start--------------------------------------------------------------------↓");
-                ShareTinkerLog.e(TAG, "| read property failed, ERROR :" + e);
+                ShareTinkerLog.e(TAG, "| read property failed, ERROR MSG : " + e.getMessage());
                 ShareTinkerLog.e(TAG, "|----------------IOException end----------------------------------------------------------------------↑");
                 ShareTinkerLog.eBlack(TAG);
 

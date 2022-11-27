@@ -48,7 +48,11 @@ public class UpgradePatch extends AbstractPatch {
         final File patchFile = new File(tempPatchPath);
 
         if (!manager.isTinkerEnabled() || !ShareTinkerInternals.isTinkerEnableWithSharedPreferences(context)) {
+            ShareTinkerLog.eBlack(TAG);
+            ShareTinkerLog.e(TAG, "UpgradePatch tryPatch:isTinkerEnabled                     ："+manager.isTinkerEnabled());
+            ShareTinkerLog.e(TAG, "UpgradePatch tryPatch:isTinkerEnableWithSharedPreferences ："+ShareTinkerInternals.isTinkerEnableWithSharedPreferences(context));
             ShareTinkerLog.e(TAG, "UpgradePatch tryPatch:patch is disabled, just return");
+            ShareTinkerLog.eBlack(TAG);
             return false;
         }
 
