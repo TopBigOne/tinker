@@ -210,7 +210,7 @@ public class SharePatchInfo {
         }
         ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.iBlack(TAG);
-        ShareTinkerLog.i(TAG, " | rewritePatchInfoFile ----------------------------------------------------------------------------------------------↓");
+        ShareTinkerLog.i(TAG, "| rewritePatchInfoFile ----------------------------------------------------------------------------------------------↓");
         ShareTinkerLog.i(TAG, "| rewritePatchInfoFile file path:" + pathInfoFile.getAbsolutePath() + " , oldVer:" + info.oldVersion + ", newVer:" + info.newVersion + ", isProtectedApp:" + (info.isProtectedApp ? 1 : 0) + ", versionToRemove:" + info.versionToRemove + ", fingerprint:" + info.fingerPrint + ", oatDir:" + info.oatDir + ", isRemoveInterpretOATDir:" + (info.isRemoveInterpretOATDir ? 1 : 0) + ", stack: " + android.util.Log.getStackTraceString(new Throwable()));
         ShareTinkerLog.i(TAG, "| rewritePatchInfoFile -----------------------------------------------------------------------------------------------↑");
         ShareTinkerLog.iBlack(TAG);
@@ -246,6 +246,7 @@ public class SharePatchInfo {
                 ShareTinkerLog.e(TAG, "|------------------------rewrite Patch Info File ERROR INFO START------------------------");
                 ShareTinkerLog.e(TAG, "| rewritePatchInfoFile#write property failed, and the ERROR is :" + e.getMessage());
                 ShareTinkerLog.e(TAG, "|------------------------rewrite Patch Info File ERROR INFO END--------------------------");
+
                 ShareTinkerLog.w(TAG, "");
                 ShareTinkerLog.w(TAG, "");
                 ShareTinkerLog.w(TAG, "write property failed, e:" + e);

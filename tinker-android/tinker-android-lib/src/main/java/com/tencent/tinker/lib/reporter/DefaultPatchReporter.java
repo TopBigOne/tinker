@@ -203,14 +203,26 @@ public class DefaultPatchReporter implements PatchReporter {
      */
     @Override
     public void onPatchException(File patchFile, Throwable e) {
-        ShareTinkerLog.i(TAG, "patchReporter onPatchException: patch exception path: %s, throwable: %s",
-            patchFile.getAbsolutePath(), e.getMessage());
+        ShareTinkerLog.eBlack(TAG);
+        ShareTinkerLog.e(TAG,"------------------------------------------onPatchException START-----------------------------------------------------------------------------------------------------------↓");
+        ShareTinkerLog.e(TAG, "patchReporter onPatchException: patch exception path: %s, throwable: %s", patchFile.getAbsolutePath(), e.getMessage());
+        ShareTinkerLog.e(TAG,"------------------------------------------onPatchException END--------------------------------------------------------------------------------------------------------------↑");
+        ShareTinkerLog.eBlack(TAG);
+
+        ShareTinkerLog.eBlack(TAG);
         ShareTinkerLog.e(TAG, "tinker patch exception, welcome to submit issue to us: https://github.com/Tencent/tinker/issues");
+        ShareTinkerLog.eBlack(TAG);
         // if (e.getMessage().contains(ShareConstants.CHECK_VM_PROPERTY_FAIL)) {
         //     ShareTinkerInternals.setTinkerDisableWithSharedPreferences(context);
         //     ShareTinkerLog.i(TAG, "check vm property exception disable tinker forever with sp");
         // }
+
+        ShareTinkerLog.eBlack(TAG);
+        ShareTinkerLog.e(TAG,"------------------------------------------printErrStackTrace START-----------------------------------------------------------------------------------------------------------↓");
+        ShareTinkerLog.eBlack(TAG+ "onPatchException， and the Stack Trace is :");
         ShareTinkerLog.printErrStackTrace(TAG, e, "tinker patch exception");
+        ShareTinkerLog.e(TAG,"------------------------------------------printErrStackTrace END--------------------------------------------------------------------------------------------------------------↑");
+        ShareTinkerLog.eBlack(TAG);
         //don't accept request any more!
         Tinker.with(context).setTinkerDisable();
         ////delete temp files, I think we don't have to clean all patch
