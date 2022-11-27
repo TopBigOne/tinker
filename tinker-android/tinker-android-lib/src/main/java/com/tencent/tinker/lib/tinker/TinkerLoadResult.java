@@ -321,7 +321,9 @@ public class TinkerLoadResult {
                 tinker.getLoadReporter().onLoadInterpret(ShareConstants.TYPE_INTERPRET_COMMAND_ERROR, ShareIntentUtil.getIntentInterpretException(intentResult));
                 break;
             case ShareConstants.ERROR_LOAD_OK:
+                ShareTinkerLog.iBlack(TAG);
                 ShareTinkerLog.i(TAG, "oh yeah, tinker load all success");
+                ShareTinkerLog.iBlack(TAG);
                 tinker.setTinkerLoaded(true);
                 // get load dex
                 dexes = ShareIntentUtil.getIntentPatchDexPaths(intentResult);

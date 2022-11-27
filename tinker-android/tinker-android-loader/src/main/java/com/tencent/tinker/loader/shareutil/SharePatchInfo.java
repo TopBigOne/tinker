@@ -64,8 +64,12 @@ public class SharePatchInfo {
 
     public static SharePatchInfo readAndCheckPropertyWithLock(File pathInfoFile, File lockFile) {
         if (pathInfoFile == null || lockFile == null) {
+            ShareTinkerLog.w(TAG, " the pathInfoFile or  lockFile  is NULL");
             return null;
         }
+
+        boolean exists = pathInfoFile.exists();
+        ShareTinkerLog.i(TAG, "readAndCheckPropertyWithLock, the  pathInfoFile  exist status is :" + exists);
         File lockParentFile = lockFile.getParentFile();
         if (!lockParentFile.exists()) {
             lockParentFile.mkdirs();
@@ -95,6 +99,7 @@ public class SharePatchInfo {
         if (pathInfoFile == null || info == null || lockFile == null) {
             return false;
         }
+        ShareTinkerLog.i(TAG, "rewritePatchInfoFile, the  pathInfoFile  exist status is : " + pathInfoFile.exists());
         File lockParentFile = lockFile.getParentFile();
         if (!lockParentFile.exists()) {
             lockParentFile.mkdirs();
@@ -122,7 +127,7 @@ public class SharePatchInfo {
     private static SharePatchInfo readAndCheckProperty(File pathInfoFile) {
         if (pathInfoFile != null) {
             boolean exists = pathInfoFile.exists();
-            ShareTinkerLog.i(TAG, "readAndCheckProperty, the  pathInfoFile  exist status is :" + exists);
+            ShareTinkerLog.w(TAG, "readAndCheckProperty, the  pathInfoFile  exist status is : " + exists);
         }
         boolean isReadPatchSuccessful   = false;
         int     numAttempts             = 0;
@@ -153,13 +158,10 @@ public class SharePatchInfo {
                 final String isRemoveInterpretOATDirStr = properties.getProperty(IS_REMOVE_INTERPRET_OAT_DIR);
                 isRemoveInterpretOATDir = (isRemoveInterpretOATDirStr != null && !isRemoveInterpretOATDirStr.isEmpty() && !"0".equals(isRemoveInterpretOATDirStr));
             } catch (IOException e) {
-
                 ShareTinkerLog.eBlack(TAG);
-                ShareTinkerLog.eBlack(TAG);
-                ShareTinkerLog.e(TAG, "|------------------------------------------------------------------------------------↓");
+                ShareTinkerLog.e(TAG, "|----------------IOException start--------------------------------------------------------------------↓");
                 ShareTinkerLog.e(TAG, "| read property failed, ERROR :" + e);
-                ShareTinkerLog.e(TAG, "|------------------------------------------------------------------------------------↑");
-                ShareTinkerLog.eBlack(TAG);
+                ShareTinkerLog.e(TAG, "|----------------IOException end----------------------------------------------------------------------↑");
                 ShareTinkerLog.eBlack(TAG);
 
             } finally {
@@ -201,6 +203,7 @@ public class SharePatchInfo {
         if (pathInfoFile == null || info == null) {
             return false;
         }
+        ShareTinkerLog.i(TAG, "rewritePatchInfoFile, the  pathInfoFile  exist status is : " + pathInfoFile.exists());
         // write fingerprint if it is null or nil
         if (ShareTinkerInternals.isNullOrNil(info.fingerPrint)) {
             info.fingerPrint = Build.FINGERPRINT;

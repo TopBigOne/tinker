@@ -150,7 +150,13 @@ public class UpgradePatch extends AbstractPatch {
 
         final String patchVersionDirectory = patchDirectory + "/" + patchName;
 
-        ShareTinkerLog.i(TAG, "UpgradePatch tryPatch:patchVersionDirectory:%s", patchVersionDirectory);
+
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.i(TAG,"------------------------------------------------------------------------------------------------↓");
+        ShareTinkerLog.i(TAG, "UpgradePatch tryPatch:patchVersionDirectory : %s", patchVersionDirectory);
+        ShareTinkerLog.i(TAG, "UpgradePatch tryPatch:isMainProcess         : %b",     manager.isMainProcess());
+        ShareTinkerLog.i(TAG,"------------------------------------------------------------------------------------------------↑");
+        ShareTinkerLog.iBlack(TAG);
 
         //copy file
         File destPatchFile = new File(patchVersionDirectory + "/" + SharePatchFileUtil.getPatchVersionFile(patchMd5));
@@ -158,12 +164,22 @@ public class UpgradePatch extends AbstractPatch {
         try {
             // check md5 first
             if (!patchMd5.equals(SharePatchFileUtil.getMD5(destPatchFile))) {
+
                 SharePatchFileUtil.copyFileUsingStream(patchFile, destPatchFile);
-                ShareTinkerLog.w(TAG, "UpgradePatch copy patch file, src file: %s size: %d, dest file: %s size:%d", patchFile.getAbsolutePath(), patchFile.length(),
+
+                ShareTinkerLog.iBlack(TAG);
+                ShareTinkerLog.i(TAG,"--------------------------copy file start ----------------------------------------------------------------------↓");
+                ShareTinkerLog.i(TAG, "UpgradePatch copy patch file, src file is : %s size: %d, dest file is: %s size:%d", patchFile.getAbsolutePath(), patchFile.length(),
                     destPatchFile.getAbsolutePath(), destPatchFile.length());
+                ShareTinkerLog.i(TAG,"--------------------------copy file end -------------------------------------------------------------------------↑");
+                ShareTinkerLog.iBlack(TAG);
             }
         } catch (IOException e) {
+            ShareTinkerLog.iBlack(TAG);
+            ShareTinkerLog.e(TAG,"-----------------------IOException start -------------------------------------------------------------------------↓");
             ShareTinkerLog.e(TAG, "UpgradePatch tryPatch:copy patch file fail from %s to %s", patchFile.getPath(), destPatchFile.getPath());
+            ShareTinkerLog.e(TAG,"-----------------------IOException end ---------------------------------------------------------------------------↑");
+            ShareTinkerLog.eBlack(TAG);
             manager.getPatchReporter().onPatchTypeExtractFail(patchFile, destPatchFile, patchFile.getName(), ShareConstants.TYPE_PATCH_FILE);
             return false;
         }

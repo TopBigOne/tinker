@@ -745,6 +745,8 @@ public class ShareTinkerInternals {
             return;
         }
         final File patchInfoFile = SharePatchFileUtil.getPatchInfoFile(tinkerDir.getAbsolutePath());
+
+        ShareTinkerLog.w(TAG, "cleanPatch, the  pathInfoFile  exist status is : " + patchInfoFile.exists());
         if (!patchInfoFile.exists()) {
             ShareTinkerLog.printErrStackTrace(TAG, new Throwable(), "try to clean patch while patch info file does not exist.");
             return;
