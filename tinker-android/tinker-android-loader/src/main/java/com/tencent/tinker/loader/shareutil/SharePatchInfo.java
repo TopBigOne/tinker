@@ -99,7 +99,7 @@ public class SharePatchInfo {
         if (pathInfoFile == null || info == null || lockFile == null) {
             return false;
         }
-        ShareTinkerLog.i(TAG, "rewritePatchInfoFile, the  pathInfoFile  exist status is : " + pathInfoFile.exists());
+        ShareTinkerLog.i(TAG, "rewritePatchInfoFileWithLock, the  pathInfoFile  exist status is : " + pathInfoFile.exists());
         File lockParentFile = lockFile.getParentFile();
         if (!lockParentFile.exists()) {
             lockParentFile.mkdirs();
