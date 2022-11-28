@@ -1,8 +1,10 @@
 apply plugin: 'java-library'
 apply plugin: 'maven'
 
-version LIB_VERSION
-group LIB_GROUP_ID
+//version LIB_VERSION
+//group LIB_GROUP_ID
+setVersion(LIB_VERSION)
+setGroup(LIB_GROUP_ID)
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
@@ -28,7 +30,7 @@ task buildTinkerSdk(type: Copy, dependsOn: [build]) {
 
 //apply from: rootProject.file('gradle/PublishArtifact.gradle')
 
-boolean isLocalMaven = false
+boolean isLocalMaven = rootProject.ext.IS_LOCAL_MAVEN
 uploadArchives {
     def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
     repositories {
@@ -40,7 +42,8 @@ uploadArchives {
             pom.packaging = LIB_TYPE_JAR
             //文件发布到下面目录
             repository(url: uri(mavenUrl)) {
-                println "----------> mavenUrl: ${mavenUrl}"
+                String info = "-----> start upload : ${LIB_POM_NAME} ,and the url is: ${mavenUrl} <----------"
+                System.err.println(info)
                 authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
             }
 

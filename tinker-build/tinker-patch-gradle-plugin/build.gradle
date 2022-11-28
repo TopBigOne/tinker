@@ -1,4 +1,4 @@
-apply plugin: 'groovy'
+ apply plugin: 'groovy'
 apply plugin: 'maven'
 
 version rootProject.ext.VERSION_NAME
@@ -37,7 +37,7 @@ sourceSets {
 
 
 
-boolean isLocalMaven = false
+boolean isLocalMaven = rootProject.ext.IS_LOCAL_MAVEN
 uploadArchives {
     def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
     repositories {
@@ -49,6 +49,8 @@ uploadArchives {
             pom.packaging = LIB_TYPE_JAR
             //文件发布到下面目录
             repository(url: uri(mavenUrl)) {
+                String info = "-----> start upload : ${LIB_POM_NAME} ,and the url is: ${mavenUrl}, isLocalMaven : ${isLocalMaven} <----------"
+                System.err.println(info)
                 authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
             }
 

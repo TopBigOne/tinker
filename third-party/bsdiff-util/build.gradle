@@ -25,7 +25,7 @@ task buildTinkerSdk(type: Copy, dependsOn: [build]) {
 
 
 
-boolean isLocalMaven = false
+boolean isLocalMaven = rootProject.ext.IS_LOCAL_MAVEN
 uploadArchives {
     def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
     repositories {

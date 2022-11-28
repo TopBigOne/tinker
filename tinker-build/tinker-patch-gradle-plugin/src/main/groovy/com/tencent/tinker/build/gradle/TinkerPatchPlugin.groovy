@@ -93,17 +93,17 @@ class TinkerPatchPlugin implements Plugin<Project> {
                 return
             }
 
-            mProject.logger.error("----------------------tinker build warning  START------------------------------------|")
-            mProject.logger.error("tinker auto operation: ")
-            mProject.logger.error("excluding annotation processor and source template from app packaging. Enable dx jumboMode to reduce package size.")
-            mProject.logger.error("enable dx jumboMode to reduce package size.")
-            mProject.logger.error("disable preDexLibraries to prevent ClassDefNotFoundException when your app is booting.")
-            mProject.logger.error("disable archive dex mode so far for keeping dex apply.")
+            mProject.logger.error("| ----------------------tinker build warning  START------------------------------------|")
+            mProject.logger.error("| tinker auto operation: ")
+            mProject.logger.error("| excluding annotation processor and source template from app packaging. Enable dx jumboMode to reduce package size.")
+            mProject.logger.error("| enable dx jumboMode to reduce package size.")
+            mProject.logger.error("| disable preDexLibraries to prevent ClassDefNotFoundException when your app is booting.")
+            mProject.logger.error("| disable archive dex mode so far for keeping dex apply.")
             mProject.logger.error("")
-            mProject.logger.error("tinker will change your build configs:")
-            mProject.logger.error("we will add TINKER_ID=${configuration.buildConfig.tinkerId} in your build output manifest file ${project.buildDir}/intermediates/manifests/full/*")
+            mProject.logger.error("| tinker will change your build configs:")
+            mProject.logger.error("| we will add TINKER_ID=${configuration.buildConfig.tinkerId} in your build output manifest file ${project.buildDir}/intermediates/manifests/full/*")
             mProject.logger.error("")
-            mProject.logger.error("if minifyEnabled is true")
+            mProject.logger.error("| if minifyEnabled is true")
 
             String tempMappingPath = configuration.buildConfig.applyMapping
 
@@ -111,22 +111,22 @@ class TinkerPatchPlugin implements Plugin<Project> {
                 mProject.logger.error("we will build ${mProject.getName()} apk with apply mapping file ${tempMappingPath}")
             }
 
-            mProject.logger.error("you will find the gen proguard rule file at ${TinkerBuildPath.getProguardConfigPath(project)}")
-            mProject.logger.error("and we will help you to put it in the proguardFiles.")
+            mProject.logger.error("| you will find the gen proguard rule file at ${TinkerBuildPath.getProguardConfigPath(project)}")
+            mProject.logger.error("| and we will help you to put it in the proguardFiles.")
             mProject.logger.error("")
-            mProject.logger.error("if multiDexEnabled is true")
-            mProject.logger.error("you will find the gen multiDexKeepProguard file at ${TinkerBuildPath.getMultidexConfigPath(project)}")
-            mProject.logger.error("and we will help you to put it in the MultiDexKeepProguardFile.")
+            mProject.logger.error("| if multiDexEnabled is true")
+            mProject.logger.error("| you will find the gen multiDexKeepProguard file at ${TinkerBuildPath.getMultidexConfigPath(project)}")
+            mProject.logger.error("| and we will help you to put it in the MultiDexKeepProguardFile.")
             mProject.logger.error("")
-            mProject.logger.error("if applyResourceMapping file is exist")
+            mProject.logger.error("| if applyResourceMapping file is exist")
             String tempResourceMappingPath = configuration.buildConfig.applyResourceMapping
             if (FileOperation.isLegalFile(tempResourceMappingPath)) {
-                mProject.logger.error("we will build ${mProject.getName()} apk with resource R.txt ${tempResourceMappingPath} file")
+                mProject.logger.error("| we will build ${mProject.getName()} apk with resource R.txt ${tempResourceMappingPath} file")
             } else {
-                mProject.logger.error("we will build ${mProject.getName()} apk with resource R.txt file")
+                mProject.logger.error("| we will build ${mProject.getName()} apk with resource R.txt file")
             }
-            mProject.logger.error("if resources.arsc has changed, you should use applyResource mode to build the new apk!")
-            mProject.logger.error("----------------------tinker build warning  END------------------------------------|")
+            mProject.logger.error("| if resources.arsc has changed, you should use applyResource mode to build the new apk!")
+            mProject.logger.error("| ----------------------tinker build warning  END------------------------------------|")
 
             android.applicationVariants.all { ApkVariant variant ->
                 def variantName = variant.name

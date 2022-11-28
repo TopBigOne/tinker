@@ -23,7 +23,7 @@ apply from: rootProject.file('gradle/PublishArtifact.gradle')
 
 
 
-boolean isLocalMaven = false
+boolean isLocalMaven = rootProject.ext.IS_LOCAL_MAVEN
 uploadArchives {
     def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
     repositories {
