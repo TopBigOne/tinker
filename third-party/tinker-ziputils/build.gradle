@@ -1,7 +1,8 @@
 apply plugin: 'java-library'
+apply plugin: 'maven'
 
-version rootProject.ext.VERSION_NAME
-group rootProject.ext.GROUP
+version LIB_VERSION
+group LIB_GROUP_ID
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
@@ -19,3 +20,26 @@ task buildTinkerSdk(type: Copy, dependsOn: [build]) {
 }
 
 apply from: rootProject.file('gradle/PublishArtifact.gradle')
+
+
+
+boolean isLocalMaven = false
+uploadArchives {
+    def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
+    repositories {
+        mavenDeployer {
+            //设置插件的GAV参数
+            pom.version = LIB_VERSION
+            pom.name = LIB_POM_NAME
+            pom.artifactId = LIB_ARTIFACT_PLUGIN_GRADLE_ID
+            pom.groupId = LIB_GROUP_ID
+            pom.packaging = LIB_TYPE_JAR
+            //文件发布到下面目录
+            repository(url: uri(mavenUrl)) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+        }
+    }
+}
+
+

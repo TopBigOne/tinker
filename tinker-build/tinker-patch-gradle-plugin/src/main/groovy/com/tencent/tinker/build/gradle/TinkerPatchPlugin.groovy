@@ -93,7 +93,7 @@ class TinkerPatchPlugin implements Plugin<Project> {
                 return
             }
 
-            mProject.logger.error("----------------------tinker build warning ------------------------------------")
+            mProject.logger.error("----------------------tinker build warning  START------------------------------------|")
             mProject.logger.error("tinker auto operation: ")
             mProject.logger.error("excluding annotation processor and source template from app packaging. Enable dx jumboMode to reduce package size.")
             mProject.logger.error("enable dx jumboMode to reduce package size.")
@@ -126,7 +126,7 @@ class TinkerPatchPlugin implements Plugin<Project> {
                 mProject.logger.error("we will build ${mProject.getName()} apk with resource R.txt file")
             }
             mProject.logger.error("if resources.arsc has changed, you should use applyResource mode to build the new apk!")
-            mProject.logger.error("-----------------------------------------------------------------")
+            mProject.logger.error("----------------------tinker build warning  END------------------------------------|")
 
             android.applicationVariants.all { ApkVariant variant ->
                 def variantName = variant.name

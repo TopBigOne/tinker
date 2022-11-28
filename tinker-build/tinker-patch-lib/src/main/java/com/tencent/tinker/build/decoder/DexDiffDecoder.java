@@ -276,7 +276,9 @@ public class DexDiffDecoder extends BaseDecoder {
         for (File dexFile : oldDexFiles) {
             Logger.d("Check if loader classes in " + dexFile.getName()
                     + " refer to any classes that is not in loader class patterns.");
+
             final DexFile dex = DexFileFactory.loadDexFile(dexFile, Opcodes.forApi(29));
+
             for (org.jf.dexlib2.iface.ClassDef classDef : dex.getClasses()) {
                 final String currClassDesc = classDef.getType();
                 if (!Utils.isStringMatchesPatterns(currClassDesc, loaderClassPatterns)) {

@@ -1,7 +1,9 @@
 apply plugin: 'java-library'
 
-version rootProject.ext.VERSION_NAME
-group rootProject.ext.GROUP
+apply plugin: 'maven'
+
+version LIB_VERSION
+group "com.bianfeng.tinker"
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
@@ -14,7 +16,7 @@ dependencies {
     api group: 'com.tencent.mm', name: 'apk-parser-lib', version: '1.2.3'
     implementation group: 'com.google.guava', name: 'guava', version: '14.0.1'
     implementation group: 'org.ow2.asm', name: 'asm', version: '6.0'
-    implementation (group: 'org.smali', name: 'dexlib2', version: '2.3.1') {
+    implementation(group: 'org.smali', name: 'dexlib2', version: '2.3.1') {
         exclude group: 'com.google.guava'
     }
     implementation group: 'dom4j', name: 'dom4j', version: '1.6.1'
@@ -33,3 +35,27 @@ sourceSets {
 }
 
 apply from: rootProject.file('gradle/PublishArtifact.gradle')
+
+
+boolean isLocalMaven = true
+uploadArchives {
+    def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
+    repositories {
+        mavenDeployer {
+            //设置插件的GAV参数
+            pom.version = LIB_VERSION
+            pom.name = LIB_POM_NAME
+            pom.artifactId = LIB_ARTIFACT_PLUGIN_GRADLE_ID
+            pom.groupId = LIB_GROUP_ID
+            pom.packaging = LIB_TYPE_JAR
+            //文件发布到下面目录
+            repository(url: uri(mavenUrl)) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+
+        }
+    }
+}
+
+
+

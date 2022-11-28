@@ -1,7 +1,8 @@
 apply plugin: 'groovy'
+apply plugin: 'maven'
 
 version rootProject.ext.VERSION_NAME
-group rootProject.ext.GROUP
+group LIB_GROUP_ID
 
 sourceCompatibility = rootProject.ext.javaVersion
 targetCompatibility = rootProject.ext.javaVersion
@@ -32,5 +33,27 @@ sourceSets {
     }
 }
 
-apply from: rootProject.file('gradle/PublishArtifact.gradle')
+//apply from: rootProject.file('gradle/PublishArtifact.gradle')
+
+
+
+boolean isLocalMaven = false
+uploadArchives {
+    def mavenUrl = isLocalMaven ? '../../repo' : LIB_REPO_URL
+    repositories {
+        mavenDeployer {
+            //设置插件的GAV参数
+            pom.version = LIB_VERSION
+            pom.artifactId = LIB_ARTIFACT_PLUGIN_GRADLE_ID
+            pom.groupId = LIB_GROUP_ID
+            pom.packaging = LIB_TYPE_JAR
+            //文件发布到下面目录
+            repository(url: uri(mavenUrl)) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+
+        }
+    }
+}
+
 
