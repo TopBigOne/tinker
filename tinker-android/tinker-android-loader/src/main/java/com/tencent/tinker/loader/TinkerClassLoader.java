@@ -30,10 +30,10 @@ import dalvik.system.PathClassLoader;
  */
 @Keep
 @SuppressLint("NewApi")
-public final class TinkerClassLoader extends PathClassLoader {
+public final class TinkerClassLoader extends RePluginClassLoader {
     private static final String TAG = "Tinker.ClassLoader";
     private final ClassLoader mOriginAppClassLoader;
-
+/*
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader());
         Log.d(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
@@ -41,28 +41,34 @@ public final class TinkerClassLoader extends PathClassLoader {
         injectDexPath(this, dexPath, optimizedDir);
     }
 
-//    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
-//         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
-//        ShareTinkerLog.w(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
-//        mOriginAppClassLoader = originAppClassLoader;
-//        injectDexPath(this, dexPath, optimizedDir);
-//    }
+    */
+
+    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
+         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
+        ShareTinkerLog.i(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
+        ShareTinkerLog.iBlack(TAG);
+        mOriginAppClassLoader = originAppClassLoader;
+        injectDexPath(this, dexPath, optimizedDir);
+    }
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        ShareTinkerLog.w(TAG, "TinkerClassLoader start  findClass  ,the class name is : "+name);
+        ShareTinkerLog.i(TAG, "TinkerClassLoader start  findClass  ,the class name is : "+name);
+        ShareTinkerLog.iBlack(TAG);
         Class<?> cl = null;
         try {
             cl = super.findClass(name);
 
         } catch (ClassNotFoundException ignored) {
-            ShareTinkerLog.w(TAG, "TinkerClassLoader start  findClass  ,in null by invoke super ");
+            ShareTinkerLog.w(TAG, "TinkerClassLoader start  findClass  ,in null by invoke super ; case 1");
+            ShareTinkerLog.wBlack(TAG);
             cl = null;
         }
         if (cl != null) {
             return cl;
         } else {
-            ShareTinkerLog.w(TAG, "TinkerClassLoader finally ,start load class by mOriginAppClassLoader");
+            ShareTinkerLog.w(TAG, "TinkerClassLoader finally ,start load class by mOriginAppClassLoader; case 2");
+            ShareTinkerLog.wBlack(TAG);
             return mOriginAppClassLoader.loadClass(name);
         }
     }

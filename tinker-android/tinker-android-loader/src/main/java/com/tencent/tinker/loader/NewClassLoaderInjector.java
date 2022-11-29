@@ -51,7 +51,7 @@ final class NewClassLoaderInjector {
         final ClassLoader newClassLoader = createNewClassLoader(oldClassLoader,
               dexOptDir, useDLC, true, patchedDexPaths);
 
-        ShareTinkerLog.w(TAG, "inject，  the new newClassLoader is : "+ newClassLoader);
+        ShareTinkerLog.i(TAG, "inject() the new newClassLoader is : "+ newClassLoader);
 
 
         doInject(app, newClassLoader);
@@ -115,17 +115,17 @@ final class NewClassLoaderInjector {
         ClassLoader result = null;
         if (useDLC && ShareTinkerInternals.isNewerOrEqualThanVersion(27, true)) {
             if (ShareTinkerInternals.isNewerOrEqualThanVersion(31, true)) {
-                ShareTinkerLog.i(TAG, " start create DelegateLastClassLoader,and the parent class is RePluginClassLoader - 1");
+                ShareTinkerLog.i(TAG, "createNewClassLoader #  start create DelegateLastClassLoader, -----> case : 1");
                 result = new DelegateLastClassLoader(combinedDexPath, combinedLibraryPath, oldClassLoader);
             } else {
-                ShareTinkerLog.i(TAG, " start create DelegateLastClassLoader,and the parent class is RePluginClassLoader - 2");
+                ShareTinkerLog.i(TAG, "createNewClassLoader #  start create DelegateLastClassLoader, -----> case : 2");
                 result = new DelegateLastClassLoader(combinedDexPath, combinedLibraryPath, ClassLoader.getSystemClassLoader());
                 final Field parentField = ClassLoader.class.getDeclaredField("parent");
                 parentField.setAccessible(true);
                 parentField.set(result, oldClassLoader);
             }
         } else {
-            ShareTinkerLog.i(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader - 3");
+            ShareTinkerLog.i(TAG, "createNewClassLoader #  start create dexOptDir, -----> case : 3");
             result = new TinkerClassLoader(combinedDexPath, dexOptDir, combinedLibraryPath, oldClassLoader);
         }
 
@@ -139,7 +139,7 @@ final class NewClassLoaderInjector {
     }
 
     private static void doInject(Application app, ClassLoader classLoader) throws Throwable {
-        ShareTinkerLog.w(TAG, " start  do inject ClassLoader");
+        ShareTinkerLog.w(TAG, " start  invoke  doInject()");
 
         Thread.currentThread().setContextClassLoader(classLoader);
 
