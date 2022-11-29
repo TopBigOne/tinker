@@ -152,10 +152,12 @@ final class NewClassLoaderInjector {
             // customized system has one.
         }
 
-        ShareTinkerLog.w(TAG, " inject ClassLoader-2");
+        ShareTinkerLog.w(TAG, " doInject ClassLoader- step 1");
 
         final Object basePackageInfo = findField(baseContext.getClass(), "mPackageInfo").get(baseContext);
+        ShareTinkerLog.w(TAG, " doInject ClassLoader- step 2");
         findField(basePackageInfo.getClass(), "mClassLoader").set(basePackageInfo, classLoader);
+        ShareTinkerLog.w(TAG, " doInject ClassLoader- step 3");
 
         if (Build.VERSION.SDK_INT < 27) {
             final Resources res = app.getResources();
@@ -171,6 +173,7 @@ final class NewClassLoaderInjector {
                 ShareTinkerLog.e(TAG, "doInject# ERROR : "+ignored.getMessage());
             }
         }
+
     }
 
     private static Field findField(Class<?> clazz, String name) throws Throwable {

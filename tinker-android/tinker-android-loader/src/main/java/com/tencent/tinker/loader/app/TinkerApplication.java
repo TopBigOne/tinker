@@ -33,6 +33,7 @@ import com.tencent.tinker.loader.TinkerUncaughtHandler;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.ShareIntentUtil;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
+import com.tencent.tinker.loader.shareutil.ShareTinkerLog;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -41,6 +42,7 @@ import java.lang.reflect.Method;
  * Created by zhangshaowen on 16/3/8.
  */
 public abstract class TinkerApplication extends Application {
+    private static final String TAG = "Tinker.Application";
     private static final String INTENT_PATCH_EXCEPTION = ShareIntentUtil.INTENT_PATCH_EXCEPTION;
     private static final String TINKER_LOADER_METHOD = "tryLoad";
 
@@ -138,10 +140,14 @@ public abstract class TinkerApplication extends Application {
                                       long applicationStartElapsedTime,
                                       long applicationStartMillisTime,
                                       Intent resultIntent) {
+
+        ShareTinkerLog.w(TAG, "createInlineFence # delegateClassName : "+delegateClassName);
         try {
+            ShareTinkerLog.i(TAG, "createInlineFence # delegateClassName : "+delegateClassName);
             // Use reflection to create the delegate so it doesn't need to go into the primary dex.
             // And we can also patch it
             final Class<?> delegateClass = Class.forName(delegateClassName, false, mCurrentClassLoader);
+
             final Constructor<?> constructor = delegateClass.getConstructor(Application.class, int.class, boolean.class,
                     long.class, long.class, Intent.class);
             final Object appLike = constructor.newInstance(app, tinkerFlags, tinkerLoadVerifyFlag,
@@ -154,8 +160,15 @@ public abstract class TinkerApplication extends Application {
             inlineFenceCtor.setAccessible(true);
             return (Handler) inlineFenceCtor.newInstance(appLike);
         } catch (Throwable thr) {
-            throw new TinkerRuntimeException("createInlineFence failed", thr);
+            throw new TinkerRuntimeException("createInlineFence failed : ", thr);
         }
+
+
+
+
+
+
+
     }
 
     protected void onBaseContextAttached(Context base, long applicationStartElapsedTime, long applicationStartMillisTime) {

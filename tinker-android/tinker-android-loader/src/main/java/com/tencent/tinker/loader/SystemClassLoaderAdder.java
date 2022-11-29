@@ -65,7 +65,7 @@ public class SystemClassLoaderAdder {
             }
             //install done
             sPatchDexCount = files.size();
-            ShareTinkerLog.i(TAG, "after loaded classloader: " + classLoader + ", dex size:" + sPatchDexCount);
+            ShareTinkerLog.i(TAG, "installDexes # after loaded classloader: " + classLoader + ", dex size:" + sPatchDexCount);
 
             if (!checkDexInstall(classLoader)) {
                 //reset patch dex
