@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.qihoo360.loader2.PMF;
 import com.qihoo360.replugin.RePlugin;
+import com.qihoo360.replugin.RePluginClassLoader;
 import com.qihoo360.replugin.helper.LogDebug;
 import com.tencent.tinker.anno.Keep;
 import com.tencent.tinker.loader.shareutil.ShareTinkerLog;
@@ -29,36 +30,15 @@ import dalvik.system.PathClassLoader;
  */
 @Keep
 @SuppressLint("NewApi")
-public final class TinkerClassLoader extends PathClassLoader {
+public final class TinkerClassLoader extends RePluginClassLoader {
     private static final String TAG = "Tinker.ClassLoader";
     private final ClassLoader mOriginAppClassLoader;
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
-        super("", libraryPath, ClassLoader.getSystemClassLoader());
+         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
+        ShareTinkerLog.w(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
-    }
-
-    @Override
-    protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
-        ShareTinkerLog.w(TAG, " start invoke loadClass.");
-        Class<?> c;
-        c = PMF.loadClass(className, resolve);
-        if (c != null) {
-            return c;
-        } else {
-            try {
-                c = this.mOriginAppClassLoader.loadClass(className);
-                if (LogDebug.LOG && RePlugin.getConfig().isPrintDetailLog()) {
-
-                    ShareTinkerLog.w(TAG," 360-RePluginClassLoader", "loadClass: load other class, cn : " + className);
-                }
-
-                return c;
-            } catch (Throwable var5) {
-                return super.loadClass(className, resolve);
-            }
-        }
     }
 
     @Override
@@ -105,6 +85,7 @@ public final class TinkerClassLoader extends PathClassLoader {
     }
 
     private static void injectDexPath(ClassLoader cl, String dexPath, File optimizedDir) {
+        ShareTinkerLog.w(TAG, " start invoke injectDexPath.");
         try {
             final List<File> dexFiles = new ArrayList<>(16);
             for (String oneDexPath : dexPath.split(":")) {

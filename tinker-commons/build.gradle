@@ -1,10 +1,8 @@
 apply plugin: 'java-library'
 apply plugin: 'maven'
 
-//version LIB_VERSION
-//group LIB_GROUP_ID
-setVersion(LIB_VERSION)
-setGroup(LIB_GROUP_ID)
+version rootProject.ext.VERSION_NAME
+group rootProject.ext.GROUP
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
