@@ -30,29 +30,39 @@ import dalvik.system.PathClassLoader;
  */
 @Keep
 @SuppressLint("NewApi")
-public final class TinkerClassLoader extends RePluginClassLoader {
+public final class TinkerClassLoader extends PathClassLoader {
     private static final String TAG = "Tinker.ClassLoader";
     private final ClassLoader mOriginAppClassLoader;
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
-         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
-        ShareTinkerLog.w(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
+        super("", libraryPath, ClassLoader.getSystemClassLoader());
+        Log.d(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
     }
 
+//    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
+//         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
+//        ShareTinkerLog.w(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
+//        mOriginAppClassLoader = originAppClassLoader;
+//        injectDexPath(this, dexPath, optimizedDir);
+//    }
+
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        ShareTinkerLog.w(TAG, " start invoke findClass.");
+        ShareTinkerLog.w(TAG, "TinkerClassLoader start  findClass  ,the class name is : "+name);
         Class<?> cl = null;
         try {
             cl = super.findClass(name);
+
         } catch (ClassNotFoundException ignored) {
+            ShareTinkerLog.w(TAG, "TinkerClassLoader start  findClass  ,in null by invoke super ");
             cl = null;
         }
         if (cl != null) {
             return cl;
         } else {
+            ShareTinkerLog.w(TAG, "TinkerClassLoader finally ,start load class by mOriginAppClassLoader");
             return mOriginAppClassLoader.loadClass(name);
         }
     }

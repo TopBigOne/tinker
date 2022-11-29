@@ -21,8 +21,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
 
+import com.qihoo360.replugin.helper.LogDebug;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
+import com.tencent.tinker.loader.shareutil.ShareTinkerLog;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -35,14 +38,22 @@ import dalvik.system.DelegateLastClassLoader;
  * Created by tangyinsheng on 2019-10-31.
  */
 final class NewClassLoaderInjector {
+    private static final String TAG = "Tinker.NewClassLoaderInjector";
     public static ClassLoader inject(Application app, ClassLoader oldClassLoader, File dexOptDir,
                                      boolean useDLC, List<File> patchedDexes) throws Throwable {
+
+        ShareTinkerLog.w(TAG, " start invoke inject.");
         final String[] patchedDexPaths = new String[patchedDexes.size()];
         for (int i = 0; i < patchedDexPaths.length; ++i) {
             patchedDexPaths[i] = patchedDexes.get(i).getAbsolutePath();
         }
+        ShareTinkerLog.w(TAG, " start createNewClassLoader");
         final ClassLoader newClassLoader = createNewClassLoader(oldClassLoader,
               dexOptDir, useDLC, true, patchedDexPaths);
+
+        ShareTinkerLog.w(TAG, "inject，  the new newClassLoader is : "+ newClassLoader);
+
+
         doInject(app, newClassLoader);
         return newClassLoader;
     }
@@ -104,14 +115,17 @@ final class NewClassLoaderInjector {
         ClassLoader result = null;
         if (useDLC && ShareTinkerInternals.isNewerOrEqualThanVersion(27, true)) {
             if (ShareTinkerInternals.isNewerOrEqualThanVersion(31, true)) {
+                ShareTinkerLog.i(TAG, " start create DelegateLastClassLoader,and the parent class is RePluginClassLoader - 1");
                 result = new DelegateLastClassLoader(combinedDexPath, combinedLibraryPath, oldClassLoader);
             } else {
+                ShareTinkerLog.i(TAG, " start create DelegateLastClassLoader,and the parent class is RePluginClassLoader - 2");
                 result = new DelegateLastClassLoader(combinedDexPath, combinedLibraryPath, ClassLoader.getSystemClassLoader());
                 final Field parentField = ClassLoader.class.getDeclaredField("parent");
                 parentField.setAccessible(true);
                 parentField.set(result, oldClassLoader);
             }
         } else {
+            ShareTinkerLog.i(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader - 3");
             result = new TinkerClassLoader(combinedDexPath, dexOptDir, combinedLibraryPath, oldClassLoader);
         }
 
@@ -125,6 +139,8 @@ final class NewClassLoaderInjector {
     }
 
     private static void doInject(Application app, ClassLoader classLoader) throws Throwable {
+        ShareTinkerLog.w(TAG, " start  do inject ClassLoader");
+
         Thread.currentThread().setContextClassLoader(classLoader);
 
         final Context baseContext = (Context) findField(app.getClass(), "mBase").get(app);
@@ -135,6 +151,8 @@ final class NewClassLoaderInjector {
             // However we should try our best to replace this field in case some
             // customized system has one.
         }
+
+        ShareTinkerLog.w(TAG, " inject ClassLoader-2");
 
         final Object basePackageInfo = findField(baseContext.getClass(), "mPackageInfo").get(baseContext);
         findField(basePackageInfo.getClass(), "mClassLoader").set(basePackageInfo, classLoader);
@@ -147,9 +165,10 @@ final class NewClassLoaderInjector {
                 final Object drawableInflater = findField(res.getClass(), "mDrawableInflater").get(res);
                 if (drawableInflater != null) {
                     findField(drawableInflater.getClass(), "mClassLoader").set(drawableInflater, classLoader);
+                    ShareTinkerLog.w(TAG, " inject ClassLoader-3");
                 }
             } catch (Throwable ignored) {
-                // Ignored.
+                ShareTinkerLog.e(TAG, "doInject# ERROR : "+ignored.getMessage());
             }
         }
     }
