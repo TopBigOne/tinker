@@ -235,13 +235,6 @@ public final class Dex {
         sectionData.order(ByteOrder.LITTLE_ENDIAN); // necessary?
 
         try {
-
-            System.out.println(TAG+" ");
-            System.out.println(TAG+" |---------------------openSection---------------------------------------------------------------↓");
-            System.out.println(TAG+" | start invoke position() ");
-            System.out.println(TAG+" | position ："+position);
-            System.out.println(TAG+" |---------------------openSection---------------------------------------------------------------↑");
-            System.out.println(TAG+" ");
             sectionData.position(position);
         } catch (Exception e) {
             System.err.println(TAG+" ");
