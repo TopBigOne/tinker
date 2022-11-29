@@ -223,8 +223,6 @@ public final class Dex {
     }
 
     public Section openSection(TableOfContents.Section tocSec) {
-
-
         int position = tocSec.off;
         if (position < 0 || position >= data.capacity()) {
             throw new IllegalArgumentException(
@@ -232,7 +230,8 @@ public final class Dex {
             );
         }
         ByteBuffer sectionData = data.duplicate();
-        sectionData.order(ByteOrder.LITTLE_ENDIAN); // necessary?
+        // necessary?
+        sectionData.order(ByteOrder.LITTLE_ENDIAN);
 
         try {
             sectionData.position(position);
