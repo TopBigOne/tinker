@@ -53,7 +53,9 @@ public class SystemClassLoaderAdder {
 
     public static void installDexes(Application application, ClassLoader loader, File dexOptDir, List<File> files,
                                     boolean isProtectedApp, boolean useDLC) throws Throwable {
+        ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "installDexes dexOptDir: " + dexOptDir.getAbsolutePath() + ", dex size:" + files.size());
+        ShareTinkerLog.iBlack(TAG);
 
         if (!files.isEmpty()) {
             files = createSortedAdditionalPathEntries(files);
@@ -68,7 +70,7 @@ public class SystemClassLoaderAdder {
             ShareTinkerLog.i(TAG, "installDexes # after loaded classloader: " + classLoader + ", dex size:" + sPatchDexCount);
 
             if (!checkDexInstall(classLoader)) {
-                ShareTinkerLog.e(TAG, "install Dex checkDexInstall is not OK ");
+                ShareTinkerLog.e(TAG, "install Dex, but the  checkDexInstall is not OK ");
                 //reset patch dex
                 SystemClassLoaderAdder.uninstallPatchDex(classLoader);
                 throw new TinkerRuntimeException(ShareConstants.CHECK_DEX_INSTALL_FAIL);
@@ -128,7 +130,9 @@ public class SystemClassLoaderAdder {
         Class<?> clazz = Class.forName(CHECK_DEX_CLASS, true, classLoader);
         Field filed = ShareReflectUtil.findField(clazz, CHECK_DEX_FIELD);
         boolean isPatch = (boolean) filed.get(null);
+        ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "checkDexInstall result: %s, checker_classloader: %s", isPatch, clazz.getClassLoader());
+        ShareTinkerLog.iBlack(TAG);
         return isPatch;
     }
 

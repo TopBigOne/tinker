@@ -47,12 +47,13 @@ final class NewClassLoaderInjector {
         for (int i = 0; i < patchedDexPaths.length; ++i) {
             patchedDexPaths[i] = patchedDexes.get(i).getAbsolutePath();
         }
-        ShareTinkerLog.w(TAG, " start createNewClassLoader");
-        final ClassLoader newClassLoader = createNewClassLoader(oldClassLoader,
-              dexOptDir, useDLC, true, patchedDexPaths);
 
-        ShareTinkerLog.w(TAG, "inject() the new newClassLoader is : "+ newClassLoader);
-
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.i(TAG, "-------TinkerClassLoader------start");
+        // 核心点，创建 TinkerClassLoader
+        final ClassLoader newClassLoader = createNewClassLoader(oldClassLoader, dexOptDir, useDLC, true, patchedDexPaths);
+        ShareTinkerLog.i(TAG, "-------TinkerClassLoader------end");
+        ShareTinkerLog.iBlack(TAG);
 
         doInject(app, newClassLoader);
         return newClassLoader;
@@ -125,7 +126,7 @@ final class NewClassLoaderInjector {
                 parentField.set(result, oldClassLoader);
             }
         } else {
-            ShareTinkerLog.i(TAG, "createNewClassLoader #  start create dexOptDir： new TinkerClassLoader --------------------------> case : 3");
+            ShareTinkerLog.i(TAG, "createNewClassLoader #  start to Create new TinkerClassLoader --------------------------> case : 3");
             result = new TinkerClassLoader(combinedDexPath, dexOptDir, combinedLibraryPath, oldClassLoader);
         }
 
@@ -139,7 +140,8 @@ final class NewClassLoaderInjector {
     }
 
     private static void doInject(Application app, ClassLoader classLoader) throws Throwable {
-        ShareTinkerLog.w(TAG, " start  invoke  doInject()");
+        ShareTinkerLog.wBlack(TAG);
+        ShareTinkerLog.w(TAG, " start  invoke  doInject() , I think it inject a classloader to mClassLoader");
 
         Thread.currentThread().setContextClassLoader(classLoader);
 
@@ -147,17 +149,19 @@ final class NewClassLoaderInjector {
         try {
             findField(baseContext.getClass(), "mClassLoader").set(baseContext, classLoader);
         } catch (Throwable ignored) {
+            ShareTinkerLog.e(TAG, "  doInject in ERROR: "+ignored.getMessage());
             // There's no mClassLoader field in ContextImpl before Android O.
             // However we should try our best to replace this field in case some
             // customized system has one.
         }
 
-        ShareTinkerLog.w(TAG, " doInject ClassLoader- step 1");
-
+        ShareTinkerLog.w(TAG, " doInject findField- step 1");
         final Object basePackageInfo = findField(baseContext.getClass(), "mPackageInfo").get(baseContext);
-        ShareTinkerLog.w(TAG, " doInject ClassLoader- step 2");
+
+        ShareTinkerLog.w(TAG, " doInject findField- step 2");
         findField(basePackageInfo.getClass(), "mClassLoader").set(basePackageInfo, classLoader);
-        ShareTinkerLog.w(TAG, " doInject ClassLoader- step 3");
+        ShareTinkerLog.w(TAG, " doInject findField- step over");
+        ShareTinkerLog.wBlack(TAG);
 
         if (Build.VERSION.SDK_INT < 27) {
             final Resources res = app.getResources();
@@ -167,7 +171,7 @@ final class NewClassLoaderInjector {
                 final Object drawableInflater = findField(res.getClass(), "mDrawableInflater").get(res);
                 if (drawableInflater != null) {
                     findField(drawableInflater.getClass(), "mClassLoader").set(drawableInflater, classLoader);
-                    ShareTinkerLog.w(TAG, " inject ClassLoader-3");
+                    ShareTinkerLog.w(TAG, " inject findField step 4");
                 }
             } catch (Throwable ignored) {
                 ShareTinkerLog.e(TAG, "doInject# ERROR : "+ignored.getMessage());
