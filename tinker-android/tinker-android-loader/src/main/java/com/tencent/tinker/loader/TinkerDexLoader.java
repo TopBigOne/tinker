@@ -195,7 +195,13 @@ public class TinkerDexLoader {
             ShareTinkerLog.iBlack(TAG);
             SystemClassLoaderAdder.installDexes(application, classLoader, optimizeDir, legalFiles, isProtectedApp, useDLC);
         } catch (Throwable e) {
-            ShareTinkerLog.e(TAG, "install dexes failed");
+
+            ShareTinkerLog.eBlack(TAG);
+            ShareTinkerLog.e(TAG," |------------------------------------------↓");
+            ShareTinkerLog.e(TAG, "|         install dexes failed             |");
+            ShareTinkerLog.e(TAG, "| Error msg :"+e.getMessage()+"|");
+            ShareTinkerLog.e(TAG," |------------------------------------------↑");
+            ShareTinkerLog.eBlack(TAG);
             intentResult.putExtra(ShareIntentUtil.INTENT_PATCH_EXCEPTION, e);
             ShareIntentUtil.setIntentReturnCode(intentResult, ShareConstants.ERROR_LOAD_PATCH_VERSION_DEX_LOAD_EXCEPTION);
             return false;
