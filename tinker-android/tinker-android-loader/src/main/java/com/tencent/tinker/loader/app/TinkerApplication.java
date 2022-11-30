@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.tencent.tinker.anno.Keep;
 import com.tencent.tinker.loader.TinkerLoader;
@@ -141,31 +142,37 @@ public abstract class TinkerApplication extends Application {
                                       long applicationStartMillisTime,
                                       Intent resultIntent) {
 
-        ShareTinkerLog.w(TAG, "createInlineFence # delegateClassName : "+delegateClassName);
+        ShareTinkerLog.w(TAG, "createInlineFence # delegateClassName : "+delegateClassName );
         try {
-            ShareTinkerLog.i(TAG, "createInlineFence # delegateClassName : "+delegateClassName);
             // Use reflection to create the delegate so it doesn't need to go into the primary dex.
             // And we can also patch it
             final Class<?> delegateClass = Class.forName(delegateClassName, false, mCurrentClassLoader);
+            ShareTinkerLog.d(TAG, "createInlineFence: step-1");
 
-            final Constructor<?> constructor = delegateClass.getConstructor(Application.class, int.class, boolean.class,
-                    long.class, long.class, Intent.class);
-            final Object appLike = constructor.newInstance(app, tinkerFlags, tinkerLoadVerifyFlag,
-                    applicationStartElapsedTime, applicationStartMillisTime, resultIntent);
+            final Constructor<?> constructor = delegateClass.getConstructor(Application.class, int.class, boolean.class, long.class, long.class, Intent.class);
+
+            ShareTinkerLog.d(TAG, "createInlineFence: step-2");
+
+            final Object appLike = constructor.newInstance(app, tinkerFlags, tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime, resultIntent);
+
+
+            ShareTinkerLog.d(TAG, "createInlineFence: step-3");
             final Class<?> inlineFenceClass = Class.forName(
                     "com.tencent.tinker.entry.TinkerApplicationInlineFence", false, mCurrentClassLoader);
+            ShareTinkerLog.d(TAG, "createInlineFence: step-4");
             final Class<?> appLikeClass = Class.forName(
                     "com.tencent.tinker.entry.ApplicationLike", false, mCurrentClassLoader);
+            ShareTinkerLog.d(TAG, "createInlineFence: step-5");
+
+
             final Constructor<?> inlineFenceCtor = inlineFenceClass.getConstructor(appLikeClass);
+            ShareTinkerLog.d(TAG, "createInlineFence: step-6");
+
             inlineFenceCtor.setAccessible(true);
             return (Handler) inlineFenceCtor.newInstance(appLike);
         } catch (Throwable thr) {
             throw new TinkerRuntimeException("createInlineFence failed : ", thr);
         }
-
-
-
-
 
 
 
