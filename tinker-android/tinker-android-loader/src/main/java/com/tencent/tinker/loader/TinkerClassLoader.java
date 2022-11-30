@@ -31,8 +31,8 @@ import dalvik.system.PathClassLoader;
 @Keep
 @SuppressLint("NewApi")
 public final class TinkerClassLoader extends RePluginClassLoader {
-    private static final String TAG = "Tinker.ClassLoader";
-    private final ClassLoader mOriginAppClassLoader;
+    private static final String      TAG = "Tinker.ClassLoader";
+    private final        ClassLoader mOriginAppClassLoader;
 /*
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader());
@@ -44,8 +44,13 @@ public final class TinkerClassLoader extends RePluginClassLoader {
     */
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
-         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
-        ShareTinkerLog.i(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
+        super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(), originAppClassLoader);
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.iBlack("|-----------------------------------------------------------------------------------↓");
+        ShareTinkerLog.iBlack("|                                                                                   |");
+        ShareTinkerLog.i(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader      |");
+        ShareTinkerLog.iBlack("|                                                                                   |");
+        ShareTinkerLog.iBlack("|-----------------------------------------------------------------------------------↑");
         ShareTinkerLog.iBlack(TAG);
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
@@ -53,7 +58,7 @@ public final class TinkerClassLoader extends RePluginClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        ShareTinkerLog.i(TAG, "TinkerClassLoader start  findClass  ,the class name is : "+name);
+        ShareTinkerLog.i(TAG, "TinkerClassLoader start  findClass  ,the class name is : " + name);
         ShareTinkerLog.iBlack(TAG);
         Class<?> cl = null;
         try {
@@ -91,12 +96,7 @@ public final class TinkerClassLoader extends RePluginClassLoader {
 
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        @SuppressWarnings("unchecked")
-        final Enumeration<URL>[] resources = (Enumeration<URL>[]) new Enumeration<?>[] {
-                Object.class.getClassLoader().getResources(name),
-                findResources(name),
-                mOriginAppClassLoader.getResources(name)
-        };
+        @SuppressWarnings("unchecked") final Enumeration<URL>[] resources = (Enumeration<URL>[]) new Enumeration<?>[]{Object.class.getClassLoader().getResources(name), findResources(name), mOriginAppClassLoader.getResources(name)};
         return new CompoundEnumeration<>(resources);
     }
 
@@ -121,7 +121,7 @@ public final class TinkerClassLoader extends RePluginClassLoader {
     @Keep
     class CompoundEnumeration<E> implements Enumeration<E> {
         private Enumeration<E>[] enums;
-        private int index = 0;
+        private int              index = 0;
 
         public CompoundEnumeration(Enumeration<E>[] enums) {
             this.enums = enums;
