@@ -125,7 +125,7 @@ final class NewClassLoaderInjector {
                 parentField.set(result, oldClassLoader);
             }
         } else {
-            ShareTinkerLog.i(TAG, "createNewClassLoader #  start create dexOptDir, --------------------------> case : 3");
+            ShareTinkerLog.i(TAG, "createNewClassLoader #  start create dexOptDir： new TinkerClassLoader --------------------------> case : 3");
             result = new TinkerClassLoader(combinedDexPath, dexOptDir, combinedLibraryPath, oldClassLoader);
         }
 

@@ -44,13 +44,13 @@ public final class TinkerClassLoader extends RePluginClassLoader {
     */
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
-        super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(), originAppClassLoader);
+        super("", libraryPath, ClassLoader.getSystemClassLoader(), originAppClassLoader);
         ShareTinkerLog.iBlack(TAG);
-        ShareTinkerLog.iBlack("|--------------------------------TinkerClassLoader Start-----------------------------------------↓");
-        ShareTinkerLog.iBlack("|                                                                                                |");
-        ShareTinkerLog.d(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader                   |");
-        ShareTinkerLog.iBlack("|                                                                                                |");
-        ShareTinkerLog.iBlack("|--------------------------------TinkerClassLoader Start-----------------------------------------↑");
+        ShareTinkerLog.i(TAG, "|--------------------------------TinkerClassLoader Start-----------------------------------------↓");
+        ShareTinkerLog.i(TAG, "|                                                                                                |");
+        ShareTinkerLog.i(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader                   |");
+        ShareTinkerLog.i(TAG, "|                                                                                                |");
+        ShareTinkerLog.i(TAG, "|--------------------------------TinkerClassLoader end-------------------------------------------↑");
         ShareTinkerLog.iBlack(TAG);
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
@@ -105,9 +105,9 @@ public final class TinkerClassLoader extends RePluginClassLoader {
 
         ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "|---------start invoke injectDexPath Info----------|");
-        ShareTinkerLog.i(TAG, "|ClassLoader : "+cl.getClass().getName());
-        ShareTinkerLog.i(TAG, "|dexPath : "+dexPath);
-        ShareTinkerLog.i(TAG, "|optimizedDir : "+optimizedDir.getAbsolutePath());
+        ShareTinkerLog.i(TAG, "|ClassLoader : " + cl.getClass().getName());
+        ShareTinkerLog.i(TAG, "|dexPath : " + dexPath);
+        ShareTinkerLog.i(TAG, "|optimizedDir : " + optimizedDir.getAbsolutePath());
         ShareTinkerLog.iBlack(TAG);
 
         try {
