@@ -129,11 +129,11 @@ public class SystemClassLoaderAdder {
     private static boolean checkDexInstall(ClassLoader classLoader) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         Class<?> clazz = Class.forName(CHECK_DEX_CLASS, true, classLoader);
         Field filed = ShareReflectUtil.findField(clazz, CHECK_DEX_FIELD);
-        boolean isPatch = (boolean) filed.get(null);
+        boolean isPatchResult = (boolean) filed.get(null);
         ShareTinkerLog.iBlack(TAG);
-        ShareTinkerLog.i(TAG, "checkDexInstall result: %s, checker_classloader: %s", isPatch, clazz.getClassLoader());
+        ShareTinkerLog.i(TAG, "checkDexInstall result: %s, checker_classloader: %s", isPatchResult, clazz.getClassLoader());
         ShareTinkerLog.iBlack(TAG);
-        return isPatch;
+        return isPatchResult;
     }
 
     private static List<File> createSortedAdditionalPathEntries(List<File> additionalPathEntries) {

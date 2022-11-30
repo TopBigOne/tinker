@@ -210,7 +210,9 @@ public class TinkerLoader extends AbstractTinkerLoader {
             version = newVersion;
         }
         if (ShareTinkerInternals.isNullOrNil(version)) {
-            ShareTinkerLog.w(TAG, "tryLoadPatchFiles:version is blank, wait main process to restart,just return");
+            ShareTinkerLog.eBlack(TAG);
+            ShareTinkerLog.e(TAG, "tryLoadPatchFiles:version is blank, wait main process to restart,just return");
+            ShareTinkerLog.eBlack(TAG);
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_INFO_BLANK);
             return;
         }
@@ -347,29 +349,36 @@ public class TinkerLoader extends AbstractTinkerLoader {
             }
         }
 
-        ShareTinkerLog.i(TAG, "tryLoadPatchFiles:now we can load patch jar. 666----> niubility");
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------------↓");
+        ShareTinkerLog.i(TAG, "| tryLoadPatchFiles:now we can load patch jar. 666----> niubility  |");
+        ShareTinkerLog.i(TAG, "|------------------------------------------------------------------↑");
 
         //now we can load patch jar
         if (!isArkHotRuning && isEnabledForDex) {
+            ShareTinkerLog.iBlack(TAG);
+            ShareTinkerLog.i(TAG, "TinkerDexLoader start loadTinkerJars");
+            ShareTinkerLog.iBlack(TAG);
             boolean loadTinkerJars = TinkerDexLoader.loadTinkerJars(app, patchVersionDirectory, oatDex, resultIntent, isSystemOTA, isProtectedApp);
+            ShareTinkerLog.i(TAG, "TinkerDexLoader loadTinkerJars result is :"+loadTinkerJars);
 
             if (isSystemOTA) {
                 // update fingerprint after load success
                 patchInfo.fingerPrint = Build.FINGERPRINT;
                 patchInfo.oatDir = loadTinkerJars ? ShareConstants.INTERPRET_DEX_OPTIMIZE_PATH : ShareConstants.DEFAULT_DEX_OPTIMIZE_PATH;
+                ShareTinkerLog.i(TAG, "TinkerDexLoader patchInfo.oatDir is : "+patchInfo.oatDir);
                 // reset to false
                 oatModeChanged = false;
 
                 if (!SharePatchInfo.rewritePatchInfoFileWithLock(patchInfoFile, patchInfo, patchInfoLockFile)) {
                     ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_REWRITE_PATCH_INFO_FAIL);
-                    ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onReWritePatchInfoCorrupted");
+                    ShareTinkerLog.e(TAG, "tryLoadPatchFiles:onReWritePatchInfoCorrupted just return");
                     return;
                 }
                 // update oat dir
                 resultIntent.putExtra(ShareIntentUtil.INTENT_PATCH_OAT_DIR, patchInfo.oatDir);
             }
             if (!loadTinkerJars) {
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchLoadDexesFail");
+                ShareTinkerLog.e(TAG, "tryLoadPatchFiles:onPatchLoadDexesFail, loadTinkerJars result is false ,just return.");
                 return;
             }
         }
@@ -387,7 +396,9 @@ public class TinkerLoader extends AbstractTinkerLoader {
         if (isEnabledForResource) {
             boolean loadTinkerResources = TinkerResourceLoader.loadTinkerResources(app, patchVersionDirectory, resultIntent);
             if (!loadTinkerResources) {
-                ShareTinkerLog.w(TAG, "tryLoadPatchFiles:onPatchLoadResourcesFail");
+                ShareTinkerLog.eBlack(TAG);
+                ShareTinkerLog.e(TAG, "tryLoadPatchFiles:loadTinkerResources result is false ,just return");
+                ShareTinkerLog.eBlack(TAG);
                 return;
             }
         }
