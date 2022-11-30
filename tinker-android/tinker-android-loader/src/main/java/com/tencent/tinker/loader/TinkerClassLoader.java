@@ -46,11 +46,11 @@ public final class TinkerClassLoader extends RePluginClassLoader {
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super(dexPath, libraryPath, ClassLoader.getSystemClassLoader(), originAppClassLoader);
         ShareTinkerLog.iBlack(TAG);
-        ShareTinkerLog.iBlack("|-----------------------------------------------------------------------------------↓");
-        ShareTinkerLog.iBlack("|                                                                                   |");
-        ShareTinkerLog.d(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader      |");
-        ShareTinkerLog.iBlack("|                                                                                   |");
-        ShareTinkerLog.iBlack("|-----------------------------------------------------------------------------------↑");
+        ShareTinkerLog.iBlack("|--------------------------------TinkerClassLoader Start-----------------------------------------↓");
+        ShareTinkerLog.iBlack("|                                                                                                |");
+        ShareTinkerLog.d(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader                   |");
+        ShareTinkerLog.iBlack("|                                                                                                |");
+        ShareTinkerLog.iBlack("|--------------------------------TinkerClassLoader Start-----------------------------------------↑");
         ShareTinkerLog.iBlack(TAG);
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
@@ -58,6 +58,7 @@ public final class TinkerClassLoader extends RePluginClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
+        ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "TinkerClassLoader start  findClass  ,the class name is : " + name);
         ShareTinkerLog.iBlack(TAG);
         Class<?> cl = null;
@@ -101,7 +102,14 @@ public final class TinkerClassLoader extends RePluginClassLoader {
     }
 
     private static void injectDexPath(ClassLoader cl, String dexPath, File optimizedDir) {
-        ShareTinkerLog.w(TAG, " start invoke injectDexPath.");
+
+        ShareTinkerLog.iBlack(TAG);
+        ShareTinkerLog.i(TAG, "|---------start invoke injectDexPath Info----------|");
+        ShareTinkerLog.i(TAG, "|ClassLoader : "+cl.getClass().getName());
+        ShareTinkerLog.i(TAG, "|dexPath : "+dexPath);
+        ShareTinkerLog.i(TAG, "|optimizedDir : "+optimizedDir.getAbsolutePath());
+        ShareTinkerLog.iBlack(TAG);
+
         try {
             final List<File> dexFiles = new ArrayList<>(16);
             for (String oneDexPath : dexPath.split(":")) {
