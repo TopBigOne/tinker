@@ -48,7 +48,7 @@ public final class TinkerClassLoader extends RePluginClassLoader {
         ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.iBlack("|-----------------------------------------------------------------------------------↓");
         ShareTinkerLog.iBlack("|                                                                                   |");
-        ShareTinkerLog.i(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader      |");
+        ShareTinkerLog.d(TAG, "|   start create TinkerClassLoader,and the parent class is RePluginClassLoader      |");
         ShareTinkerLog.iBlack("|                                                                                   |");
         ShareTinkerLog.iBlack("|-----------------------------------------------------------------------------------↑");
         ShareTinkerLog.iBlack(TAG);

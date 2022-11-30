@@ -188,6 +188,11 @@ public class TinkerDexLoader {
         }
         try {
             final boolean useDLC = application.isUseDelegateLastClassLoader();
+            ShareTinkerLog.iBlack(TAG);
+            ShareTinkerLog.i(TAG," |---------------------|");
+            ShareTinkerLog.d(TAG, "| start install dexes |");
+            ShareTinkerLog.i(TAG," |---------------------|");
+            ShareTinkerLog.iBlack(TAG);
             SystemClassLoaderAdder.installDexes(application, classLoader, optimizeDir, legalFiles, isProtectedApp, useDLC);
         } catch (Throwable e) {
             ShareTinkerLog.e(TAG, "install dexes failed");

@@ -51,7 +51,7 @@ final class NewClassLoaderInjector {
         final ClassLoader newClassLoader = createNewClassLoader(oldClassLoader,
               dexOptDir, useDLC, true, patchedDexPaths);
 
-        ShareTinkerLog.i(TAG, "inject() the new newClassLoader is : "+ newClassLoader);
+        ShareTinkerLog.w(TAG, "inject() the new newClassLoader is : "+ newClassLoader);
 
 
         doInject(app, newClassLoader);
@@ -125,7 +125,7 @@ final class NewClassLoaderInjector {
                 parentField.set(result, oldClassLoader);
             }
         } else {
-            ShareTinkerLog.i(TAG, "createNewClassLoader #  start create dexOptDir, -----> case : 3");
+            ShareTinkerLog.i(TAG, "createNewClassLoader #  start create dexOptDir, --------------------------> case : 3");
             result = new TinkerClassLoader(combinedDexPath, dexOptDir, combinedLibraryPath, oldClassLoader);
         }
 
