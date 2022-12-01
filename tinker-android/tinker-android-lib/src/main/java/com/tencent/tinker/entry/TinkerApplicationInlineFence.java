@@ -29,6 +29,7 @@ import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_B
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_CLASSLOADER;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_RESOURCES;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_GET_SYSTEM_SERVICE;
+import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_INIT_QI_HU_RE_PLUGIN;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_MZ_NIGHTMODE_USE_OF;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_BASE_CONTEXT_ATTACHED;
 import static com.tencent.tinker.loader.app.TinkerInlineFenceAction.ACTION_ON_CONFIGURATION_CHANGED;
@@ -117,6 +118,12 @@ public final class TinkerApplicationInlineFence extends Handler {
                 msg.obj = mAppLike.mzNightModeUseOf();
                 break;
             }
+
+            case ACTION_INIT_QI_HU_RE_PLUGIN: {
+                mAppLike.onInitReplugin((Context) msg.obj);
+                break;
+            }
+
             default: {
                 throw new IllegalStateException("Should not be here.");
             }

@@ -156,7 +156,11 @@ public class TinkerLoadResult {
             //     break;
             case ShareConstants.ERROR_LOAD_PATCH_DIRECTORY_NOT_EXIST:
             case ShareConstants.ERROR_LOAD_PATCH_INFO_NOT_EXIST:
-                ShareTinkerLog.e(TAG, "can't find patch file, is ok, just return");
+                ShareTinkerLog.eBlack(TAG);
+                ShareTinkerLog.e(TAG, "---------------------------------------------|");
+                ShareTinkerLog.e(TAG, "can't find patch file, is ok, just return    |");
+                ShareTinkerLog.e(TAG, "---------------------------------------------|");
+                ShareTinkerLog.eBlack(TAG);
                 break;
 
             case ShareConstants.ERROR_LOAD_PATCH_INFO_CORRUPTED:

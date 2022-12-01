@@ -38,12 +38,22 @@ public final class TinkerInlineFenceAction {
     public static final int ACTION_GET_ASSETS = 9;
     public static final int ACTION_GET_RESOURCES = 10;
     public static final int ACTION_GET_SYSTEM_SERVICE = 11;
-    public static final int ACTION_MZ_NIGHTMODE_USE_OF = 12;
+    public static final int ACTION_MZ_NIGHTMODE_USE_OF  = 12;
+    public static final int ACTION_INIT_QI_HU_RE_PLUGIN = 13;
 
     static void callOnBaseContextAttached(Handler inlineFence, Context context) {
         Message msg = null;
         try {
             msg = Message.obtain(inlineFence, ACTION_ON_BASE_CONTEXT_ATTACHED, context);
+            inlineFence.handleMessage(msg);
+        } finally {
+            msg.recycle();
+        }
+    }
+    static void callOnInitReplugin(Handler inlineFence, Context context) {
+        Message msg = null;
+        try {
+            msg = Message.obtain(inlineFence, ACTION_INIT_QI_HU_RE_PLUGIN, context);
             inlineFence.handleMessage(msg);
         } finally {
             msg.recycle();

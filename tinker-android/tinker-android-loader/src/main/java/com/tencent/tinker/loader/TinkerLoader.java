@@ -45,14 +45,23 @@ public class TinkerLoader extends AbstractTinkerLoader {
      */
     private SharePatchInfo patchInfo;
 
+    Intent resultIntent;
+
+    public TinkerLoader() {
+        resultIntent = new Intent();
+    }
+
+    public Intent getResultIntent(){
+        return resultIntent;
+    }
+
     /**
      * only main process can handle patch version change or incomplete
      */
     @Override
     public Intent tryLoad(TinkerApplication app) {
         ShareTinkerLog.d(TAG, "tryLoad test test");
-        Intent resultIntent = new Intent();
-
+       // Intent resultIntent = new Intent();
         long begin = SystemClock.elapsedRealtime();
         tryLoadPatchFilesInternal(app, resultIntent);
         long cost = SystemClock.elapsedRealtime() - begin;

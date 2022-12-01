@@ -25,7 +25,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.tencent.tinker.anno.Keep;
 import com.tencent.tinker.loader.TinkerLoader;
@@ -37,7 +36,6 @@ import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 import com.tencent.tinker.loader.shareutil.ShareTinkerLog;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 
 /**
  * Created by zhangshaowen on 16/3/8.
@@ -77,6 +75,7 @@ public abstract class TinkerApplication extends Application {
 
     private final boolean useDelegateLastClassLoader;
     private final boolean useInterpretModeOnSupported32BitSystem;
+    private   TinkerLoader mTinkerLoader;
 
     protected TinkerApplication(int tinkerFlags) {
         this(tinkerFlags, "com.tencent.tinker.entry.DefaultApplicationLike");
@@ -119,18 +118,39 @@ public abstract class TinkerApplication extends Application {
         }
     }
 
+    private void fetchTinkerResultIntent() {
+        ShareTinkerLog.d(TAG, "fetchTinkerResultIntent ----step-1");
+        TinkerLoader mTinkerLoader = new TinkerLoader();
+        tinkerResultIntent = mTinkerLoader.getResultIntent();
+    }
+
+    private void onInItReplugin(Context base) {
+        ShareTinkerLog.d(TAG, "onInItReplugin ----step-3");
+        TinkerInlineFenceAction.callOnInitReplugin(mInlineFence, base);
+        ShareTinkerLog.d(TAG, "onInItReplugin ----step-3-over");
+    }
+    /**
+     * 去执行加载补丁的业务
+     */
     private void loadTinker() {
         try {
-            //reflect tinker loader, because loaderClass may be define by user!
-            Class<?> tinkerLoadClass = Class.forName(loaderClassName, false, TinkerApplication.class.getClassLoader());
-            Method loadMethod = tinkerLoadClass.getMethod(TINKER_LOADER_METHOD, TinkerApplication.class);
-            Constructor<?> constructor = tinkerLoadClass.getConstructor();
-            tinkerResultIntent = (Intent) loadMethod.invoke(constructor.newInstance(), this);
+            ShareTinkerLog.d(TAG, "loadTinker ----step-4");
+            //   reflect tinker loader, because loaderClass may be define by user!
+            //  Class<?> tinkerLoadClass = Class.forName(loaderClassName, false, TinkerApplication.class.getClassLoader());
+            //  Method loadMethod = tinkerLoadClass.getMethod(TINKER_LOADER_METHOD, TinkerApplication.class);
+            //  Constructor<?> constructor = tinkerLoadClass.getConstructor();
+            //  tinkerResultIntent = (Intent) loadMethod.invoke(constructor.newInstance(), this);
+
+            // add it by guangya.
+            tinkerResultIntent = mTinkerLoader.tryLoad(this);
+            ShareTinkerLog.d(TAG, "loadTinker ----step-4-over");
+
         } catch (Throwable e) {
             //has exception, put exception error code
             tinkerResultIntent = new Intent();
             ShareIntentUtil.setIntentReturnCode(tinkerResultIntent, ShareConstants.ERROR_LOAD_PATCH_UNKNOWN_EXCEPTION);
             tinkerResultIntent.putExtra(INTENT_PATCH_EXCEPTION, e);
+            ShareTinkerLog.e(TAG, "loadTinker ----step-4-over in exception");
         }
     }
 
@@ -173,18 +193,16 @@ public abstract class TinkerApplication extends Application {
         } catch (Throwable thr) {
             throw new TinkerRuntimeException("createInlineFence failed : ", thr);
         }
-
-
-
     }
 
     protected void onBaseContextAttached(Context base, long applicationStartElapsedTime, long applicationStartMillisTime) {
         try {
+            fetchTinkerResultIntent();
+            initInlineFence(applicationStartElapsedTime, applicationStartMillisTime);
+            onInItReplugin(base);
             loadTinker();
             mCurrentClassLoader = base.getClassLoader();
-            mInlineFence = createInlineFence(this, tinkerFlags, delegateClassName,
-                    tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime,
-                    tinkerResultIntent);
+
             TinkerInlineFenceAction.callOnBaseContextAttached(mInlineFence, base);
             //reset save mode
             if (useSafeMode) {
@@ -196,6 +214,14 @@ public abstract class TinkerApplication extends Application {
             throw new TinkerRuntimeException(thr.getMessage(), thr);
         }
     }
+
+    private void initInlineFence(long applicationStartElapsedTime, long applicationStartMillisTime) {
+        ShareTinkerLog.d(TAG, "initInlineFence ----step-2");
+        mInlineFence = createInlineFence(this, tinkerFlags, delegateClassName,
+                tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime,
+                tinkerResultIntent);
+    }
+
 
     @Override
     protected void attachBaseContext(Context base) {

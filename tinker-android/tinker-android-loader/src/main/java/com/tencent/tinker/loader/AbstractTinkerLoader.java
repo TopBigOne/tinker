@@ -25,5 +25,10 @@ import com.tencent.tinker.loader.app.TinkerApplication;
  * Created by zhangshaowen on 16/4/30.
  */
 public abstract class AbstractTinkerLoader {
+    /**
+     * 尝试加载Tinker
+     * @param app
+     * @return
+     */
     abstract public Intent tryLoad(TinkerApplication app);
 }
