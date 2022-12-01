@@ -30,9 +30,10 @@ import dalvik.system.PathClassLoader;
  */
 @Keep
 @SuppressLint("NewApi")
-public final class TinkerClassLoader extends PathClassLoader {
+public final class TinkerClassLoader extends RePluginClassLoader {
     private static final String      TAG = "Tinker.ClassLoader";
     private final        ClassLoader mOriginAppClassLoader;
+/*
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader());
@@ -44,10 +45,10 @@ public final class TinkerClassLoader extends PathClassLoader {
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
     }
+*/
 
 
-
-/*    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
+    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader(), originAppClassLoader);
         ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "|--------------------------------TinkerClassLoader Start-----------------------------------------↓");
@@ -58,7 +59,7 @@ public final class TinkerClassLoader extends PathClassLoader {
         ShareTinkerLog.iBlack(TAG);
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
-    }*/
+    }
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -108,11 +109,10 @@ public final class TinkerClassLoader extends PathClassLoader {
     private static void injectDexPath(ClassLoader cl, String dexPath, File optimizedDir) {
 
         ShareTinkerLog.iBlack(TAG);
-        ShareTinkerLog.i(TAG, "|---------start invoke injectDexPath Info----------|");
+        ShareTinkerLog.i(TAG, "|---------invoke injectDexPath Info-start---------↓");
         ShareTinkerLog.i(TAG, "|ClassLoader : " + cl.getClass().getName());
         ShareTinkerLog.i(TAG, "|dexPath : " + dexPath);
         ShareTinkerLog.i(TAG, "|optimizedDir : " + optimizedDir.getAbsolutePath());
-        ShareTinkerLog.iBlack(TAG);
 
         try {
             final List<File> dexFiles = new ArrayList<>(16);
@@ -125,6 +125,10 @@ public final class TinkerClassLoader extends PathClassLoader {
             if (!dexFiles.isEmpty()) {
                 SystemClassLoaderAdder.injectDexesInternal(cl, dexFiles, optimizedDir);
             }
+            ShareTinkerLog.i(TAG, "|---------invoke injectDexPath Info-end---------↑");
+            ShareTinkerLog.iBlack(TAG);
+
+
         } catch (Throwable thr) {
             throw new TinkerRuntimeException("Fail to create TinkerClassLoader.", thr);
         }

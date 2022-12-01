@@ -151,6 +151,10 @@ final class NewClassLoaderInjector {
         Thread.currentThread().setContextClassLoader(classLoader);
 
         final Context baseContext = (Context) findField(app.getClass(), "mBase").get(app);
+        if (baseContext==null) {
+            ShareTinkerLog.e(TAG, " baseContext is null doInject just return.");
+            return;
+        }
         try {
             findField(baseContext.getClass(), "mClassLoader").set(baseContext, classLoader);
         } catch (Throwable ignored) {
@@ -178,7 +182,7 @@ final class NewClassLoaderInjector {
                 final Object drawableInflater = findField(res.getClass(), "mDrawableInflater").get(res);
                 if (drawableInflater != null) {
                     findField(drawableInflater.getClass(), "mClassLoader").set(drawableInflater, classLoader);
-                    ShareTinkerLog.w(TAG, " inject findField step 4");
+                    ShareTinkerLog.w(TAG, " doInject findField step 3");
                 }
             } catch (Throwable ignored) {
                 ShareTinkerLog.e(TAG, "doInject# ERROR : "+ignored.getMessage());
@@ -196,8 +200,7 @@ final class NewClassLoaderInjector {
                 return result;
             } catch (Throwable ignored) {
                 if (currClazz == Object.class) {
-                    throw new NoSuchFieldException("Cannot find field "
-                            + name + " in class " + clazz.getName() + " and its super classes.");
+                    throw new NoSuchFieldException("Cannot find field " + name + " in class " + clazz.getName() + " and its super classes.");
                 } else {
                     currClazz = currClazz.getSuperclass();
                 }
