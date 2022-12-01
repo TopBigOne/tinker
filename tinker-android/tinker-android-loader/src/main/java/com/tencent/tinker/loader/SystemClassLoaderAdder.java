@@ -70,7 +70,7 @@ public class SystemClassLoaderAdder {
             ShareTinkerLog.i(TAG, "installDexes # after loaded classloader: " + classLoader + ", dex size:" + sPatchDexCount);
 
             if (!checkDexInstall(classLoader)) {
-                ShareTinkerLog.e(TAG, "install Dex, but the  checkDexInstall is not OK ");
+                ShareTinkerLog.e(TAG, "install Dex, but the  checkDexInstall result is not OK ");
                 //reset patch dex
                 SystemClassLoaderAdder.uninstallPatchDex(classLoader);
                 throw new TinkerRuntimeException(ShareConstants.CHECK_DEX_INSTALL_FAIL);

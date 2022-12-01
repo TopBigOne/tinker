@@ -387,7 +387,9 @@ public class TinkerLoader extends AbstractTinkerLoader {
                 resultIntent.putExtra(ShareIntentUtil.INTENT_PATCH_OAT_DIR, patchInfo.oatDir);
             }
             if (!loadTinkerJars) {
+                ShareTinkerLog.eBlack(TAG);
                 ShareTinkerLog.e(TAG, "tryLoadPatchFiles:onPatchLoadDexesFail, loadTinkerJars result is false ,just return.");
+                ShareTinkerLog.eBlack(TAG);
                 return;
             }
         }
