@@ -30,20 +30,24 @@ import dalvik.system.PathClassLoader;
  */
 @Keep
 @SuppressLint("NewApi")
-public final class TinkerClassLoader extends RePluginClassLoader {
+public final class TinkerClassLoader extends PathClassLoader {
     private static final String      TAG = "Tinker.ClassLoader";
     private final        ClassLoader mOriginAppClassLoader;
-/*
+
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader());
-        Log.d(TAG, " start create TinkerClassLoader,and the parent class is RePluginClassLoader");
+        ShareTinkerLog.i(TAG, "|--------------------------------TinkerClassLoader Start-----------------------------------------↓");
+        ShareTinkerLog.i(TAG, "|                                                                                                |");
+        ShareTinkerLog.i(TAG, "|   start create TinkerClassLoader,and the parent class is PathClassLoader                   |");
+        ShareTinkerLog.i(TAG, "|                                                                                                |");
+        ShareTinkerLog.i(TAG, "|--------------------------------TinkerClassLoader end-------------------------------------------↑");
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
     }
 
-    */
 
-    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
+
+/*    TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader(), originAppClassLoader);
         ShareTinkerLog.iBlack(TAG);
         ShareTinkerLog.i(TAG, "|--------------------------------TinkerClassLoader Start-----------------------------------------↓");
@@ -54,7 +58,7 @@ public final class TinkerClassLoader extends RePluginClassLoader {
         ShareTinkerLog.iBlack(TAG);
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
-    }
+    }*/
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {

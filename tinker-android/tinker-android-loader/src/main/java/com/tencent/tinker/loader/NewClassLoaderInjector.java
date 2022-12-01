@@ -141,6 +141,11 @@ final class NewClassLoaderInjector {
 
     private static void doInject(Application app, ClassLoader classLoader) throws Throwable {
         ShareTinkerLog.wBlack(TAG);
+        Log.d(TAG, " ");
+        Log.d(TAG, "|--------------------doInject-----------------------↓");
+        Log.d(TAG, "| start modify : mBase ,mClassLoader ,mPackageInfo  |");
+        Log.d(TAG, "|---------------------------------------------------↑");
+        Log.d(TAG, " ");
         ShareTinkerLog.w(TAG, " start  invoke  doInject() , I think it inject a classloader to mClassLoader");
 
         Thread.currentThread().setContextClassLoader(classLoader);
@@ -156,12 +161,14 @@ final class NewClassLoaderInjector {
         }
 
         ShareTinkerLog.w(TAG, " doInject findField- step 1");
+        // 获取 mPackageInfo
         final Object basePackageInfo = findField(baseContext.getClass(), "mPackageInfo").get(baseContext);
 
         ShareTinkerLog.w(TAG, " doInject findField- step 2");
         findField(basePackageInfo.getClass(), "mClassLoader").set(basePackageInfo, classLoader);
         ShareTinkerLog.w(TAG, " doInject findField- step over");
         ShareTinkerLog.wBlack(TAG);
+
 
         if (Build.VERSION.SDK_INT < 27) {
             final Resources res = app.getResources();
