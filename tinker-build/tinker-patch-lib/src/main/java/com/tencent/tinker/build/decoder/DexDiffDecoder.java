@@ -382,10 +382,12 @@ public class DexDiffDecoder extends BaseDecoder {
                 }
             }
         }
-        if (hasInvalidCases) {
-            throw new TinkerPatchException("There are fatal reasons that cause Tinker interrupt"
-                    + " patch generating procedure, see logs above.");
-        }
+        // modify by guangya ;2022/12/4 ---start
+//        if (hasInvalidCases) {
+//            throw new TinkerPatchException("There are fatal reasons that cause Tinker interrupt"
+//                    + " patch generating procedure, see logs above.");
+//        }
+        // modify by guangya ;2022/12/4 ---end
     }
 
     @SuppressWarnings("NewApi")
