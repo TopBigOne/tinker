@@ -44,6 +44,7 @@ import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.ReferenceType;
 import org.jf.dexlib2.builder.BuilderMutableMethodImplementation;
 import org.jf.dexlib2.dexbacked.DexBackedDexFile;
+import org.jf.dexlib2.dexbacked.DexBackedField;
 import org.jf.dexlib2.iface.DexFile;
 import org.jf.dexlib2.iface.Field;
 import org.jf.dexlib2.iface.Method;
@@ -53,6 +54,7 @@ import org.jf.dexlib2.iface.instruction.ReferenceInstruction;
 import org.jf.dexlib2.iface.reference.FieldReference;
 import org.jf.dexlib2.iface.reference.MethodReference;
 import org.jf.dexlib2.iface.reference.TypeReference;
+import org.jf.dexlib2.iface.value.EncodedValue;
 import org.jf.dexlib2.util.MethodUtil;
 import org.jf.dexlib2.util.TypeUtils;
 import org.jf.dexlib2.writer.builder.BuilderField;
@@ -242,6 +244,7 @@ public class DexDiffDecoder extends BaseDecoder {
             Logger.d("No dexes were changed, nothing needs to be done next.");
             return;
         }
+        Logger.d("-------onAllPatchesEnd--------- step 1");
 
         checkIfLoaderClassesReferToNonLoaderClasses();
 
@@ -272,6 +275,7 @@ public class DexDiffDecoder extends BaseDecoder {
 
     private void checkIfLoaderClassesReferToNonLoaderClasses()
             throws IOException, TinkerPatchException {
+        Logger.d("-------checkIfLoaderClassesReferToNonLoaderClasses--------- step 2");
         boolean hasInvalidCases = false;
         for (File dexFile : oldDexFiles) {
             Logger.d("Check if loader classes in " + dexFile.getName()
@@ -383,10 +387,9 @@ public class DexDiffDecoder extends BaseDecoder {
             }
         }
         // modify by guangya ;2022/12/4 ---start
-//        if (hasInvalidCases) {
-//            throw new TinkerPatchException("There are fatal reasons that cause Tinker interrupt"
-//                    + " patch generating procedure, see logs above.");
-//        }
+        if (hasInvalidCases) {
+            throw new TinkerPatchException("There are fatal reasons that cause Tinker interrupt" + " patch generating procedure, see logs above.");
+        }
         // modify by guangya ;2022/12/4 ---end
     }
 
@@ -532,6 +535,7 @@ public class DexDiffDecoder extends BaseDecoder {
 
     @SuppressWarnings("NewApi")
     private void generatePatchInfoFile() throws IOException {
+        Logger.d("-------generatePatchInfoFile--------- step 3");
         generatePatchedDexInfoFile();
 
         // generateSmallPatchedDexInfoFile is blocked by issue we found in ART environment
@@ -690,6 +694,8 @@ public class DexDiffDecoder extends BaseDecoder {
     }
 
     private void addTestDex() throws IOException {
+        Logger.d("-------DexDiffDecoder--------- step 4");
+        Logger.d("start add test dex");
         //write test dex
         String dexMode = "jar";
         if (config.mDexRaw) {

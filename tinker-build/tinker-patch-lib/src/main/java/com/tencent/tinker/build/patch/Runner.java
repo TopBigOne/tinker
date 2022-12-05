@@ -59,8 +59,8 @@ public class Runner {
     }
 
     protected void tinkerPatch() {
-        Logger.d("-----------------------Tinker patch begin-----------------------");
-
+        Logger.d("-----------------------Tinker patch begin-----------------------↓");
+        Logger.d("Config info: \n");
         Logger.d(mConfig.toString());
         try {
             //gen patch
@@ -81,9 +81,9 @@ public class Runner {
             goToError(e, ERRNO_USAGE);
         }
 
-        Logger.d("Tinker patch done, total time cost: %fs", diffTimeFromBegin());
-        Logger.d("Tinker patch done, you can go to file to find the output %s", mConfig.mOutFolder);
-        Logger.d("-----------------------Tinker patch end-------------------------");
+        Logger.d(" Tinker patch done, total time cost : %fs", diffTimeFromBegin());
+        Logger.d(" Tinker patch done, you can go to file to find the output %s", mConfig.mOutFolder);
+        Logger.d("|-----------------------Tinker patch end-------------------------↑");
     }
 
     private void loadConfigFromGradle(InputParam inputParam) {

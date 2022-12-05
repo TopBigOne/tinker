@@ -190,7 +190,7 @@ public class TinkerDexLoader {
             final boolean useDLC = application.isUseDelegateLastClassLoader();
             SystemClassLoaderAdder.installDexes(application, classLoader, optimizeDir, legalFiles, isProtectedApp, useDLC);
         } catch (Throwable e) {
-            ShareTinkerLog.e(TAG, "install dexes failed");
+            ShareTinkerLog.e(TAG, "install dexes failed : " +e.getMessage());
             intentResult.putExtra(ShareIntentUtil.INTENT_PATCH_EXCEPTION, e);
             ShareIntentUtil.setIntentReturnCode(intentResult, ShareConstants.ERROR_LOAD_PATCH_VERSION_DEX_LOAD_EXCEPTION);
             return false;

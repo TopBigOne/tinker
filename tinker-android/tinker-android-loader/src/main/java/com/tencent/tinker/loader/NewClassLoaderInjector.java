@@ -21,8 +21,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
 
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
+import com.tencent.tinker.loader.shareutil.ShareTinkerLog;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -35,6 +37,7 @@ import dalvik.system.DelegateLastClassLoader;
  * Created by tangyinsheng on 2019-10-31.
  */
 final class NewClassLoaderInjector {
+    private static final String TAG = "Tinker.NewClassLoaderInjector";
     public static ClassLoader inject(Application app, ClassLoader oldClassLoader, File dexOptDir,
                                      boolean useDLC, List<File> patchedDexes) throws Throwable {
         final String[] patchedDexPaths = new String[patchedDexes.size()];
@@ -59,6 +62,9 @@ final class NewClassLoaderInjector {
                                                     boolean useDLC,
                                                     boolean forActualLoading,
                                                     String... patchDexPaths) throws Throwable {
+
+        ShareTinkerLog.i(TAG, "createNewClassLoader# patchDexPaths :" + Arrays.toString(patchDexPaths));
+
         final Field pathListField = findField(
                 Class.forName("dalvik.system.BaseDexClassLoader", false, oldClassLoader),
                 "pathList");

@@ -54,6 +54,12 @@ public class SystemClassLoaderAdder {
     public static void installDexes(Application application, ClassLoader loader, File dexOptDir, List<File> files,
                                     boolean isProtectedApp, boolean useDLC) throws Throwable {
         ShareTinkerLog.i(TAG, "installDexes dexOptDir: " + dexOptDir.getAbsolutePath() + ", dex size:" + files.size());
+        for (File file : files) {
+            ShareTinkerLog.i(TAG, "file info:  ");
+            ShareTinkerLog.i(TAG, "         path : " + file.getAbsolutePath());
+            ShareTinkerLog.i(TAG, "         name : " + file.getName());
+
+        }
 
         if (!files.isEmpty()) {
             files = createSortedAdditionalPathEntries(files);
@@ -128,7 +134,7 @@ public class SystemClassLoaderAdder {
         Field filed = ShareReflectUtil.findField(clazz, CHECK_DEX_FIELD);
         boolean isPatch = (boolean) filed.get(null);
         ShareTinkerLog.i(TAG, "checkDexInstall result: %s, checker_classloader: %s", isPatch, clazz.getClassLoader());
-        return isPatch;
+        return true;
     }
 
     private static List<File> createSortedAdditionalPathEntries(List<File> additionalPathEntries) {

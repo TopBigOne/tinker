@@ -37,8 +37,8 @@ ext {
 
 //    GROUP = 'com.tencent.tinker'
     GROUP = 'com.bianfeng.tinker'
-    VERSION_NAME = '1.9.5'
-    LIB_VERSION_NAME = '1.9.5.1'
+    VERSION_NAME = '2.3.3'
+    LIB_VERSION_NAME = '2.3.4'
 
     POM_DESCRIPTION = 'Tinker is a hot-fix solution library for Android, it supports dex, library and resources update without reinstalling apk.'
     POM_URL = 'https://github.com/Tencent/tinker'
