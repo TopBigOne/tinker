@@ -33,6 +33,7 @@ dependencies {
     compileOnly fileTree(dir: 'stubs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     implementation project(':tinker-android:tinker-android-anno-support')
+    compileOnly files('libs/replugin-host-library-debug.aar')
 }
 
 task buildTinkerSdk(type: Copy, dependsOn: [build]) {

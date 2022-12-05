@@ -2,6 +2,7 @@ package com.tencent.tinker.loader;
 
 import android.annotation.SuppressLint;
 
+import com.qihoo360.replugin.RePluginClassLoader;
 import com.tencent.tinker.anno.Keep;
 
 import java.io.File;
@@ -12,22 +13,27 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import dalvik.system.BaseDexClassLoader;
-import dalvik.system.PathClassLoader;
-
 /**
  * Created by tangyinsheng on 2020-01-09.
  */
 @Keep
 @SuppressLint("NewApi")
-public final class TinkerClassLoader extends PathClassLoader {
+public final class TinkerClassLoader extends RePluginClassLoader {
     private final ClassLoader mOriginAppClassLoader;
 
     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
+        super("", libraryPath, ClassLoader.getSystemClassLoader(),originAppClassLoader);
+        mOriginAppClassLoader = originAppClassLoader;
+        injectDexPath(this, dexPath, optimizedDir);
+    }
+    /*
+     TinkerClassLoader(String dexPath, File optimizedDir, String libraryPath, ClassLoader originAppClassLoader) {
         super("", libraryPath, ClassLoader.getSystemClassLoader());
         mOriginAppClassLoader = originAppClassLoader;
         injectDexPath(this, dexPath, optimizedDir);
     }
+    */
+
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
