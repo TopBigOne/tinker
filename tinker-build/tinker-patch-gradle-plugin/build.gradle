@@ -32,5 +32,26 @@ sourceSets {
     }
 }
 
-apply from: rootProject.file('gradle/PublishArtifact.gradle')
+
+//apply from: rootProject.file('gradle/PublishArtifact.gradle')
+apply plugin: 'maven'
+boolean isLocalMaven = rootProject.ext.IS_LOCAL_MAVEN
+uploadArchives {
+    def mavenUrl = isLocalMaven ? '../../repo' : rootProject.ext.LIB_REPO_URL
+    repositories {
+        mavenDeployer {
+            pom.version = rootProject.ext.LIB_VERSION_NAME
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.groupId = rootProject.ext.GROUP
+            pom.packaging = POM_PACKAGING
+            //文件发布到下面目录
+            repository(url: uri(mavenUrl)) {
+                String info = "-----> start upload : ${POM_NAME} ,and the url is: ${mavenUrl} <----------"
+                System.err.println(info)
+                authentication(userName: rootProject.ext.NEXUS_USERNAME, password: rootProject.ext.NEXUS_PASSWORD)
+            }
+
+        }
+    }
+}
 
