@@ -223,6 +223,9 @@ public class DexDiffPatchInternal extends BasePatchInternal {
         }
 
         File classNFile = new File(dexFilePath, ShareConstants.CLASS_N_APK_NAME);
+        ShareTinkerLog.i(TAG,"-----verify merge classN.apk------case 2");
+        ShareTinkerLog.i(TAG,"classNFile length is : "+classNFile.length()/1024);
+
         boolean result = true;
         if (classNFile.exists()) {
             for (ShareDexDiffPatchInfo info : classNDexInfo.keySet()) {
@@ -265,6 +268,8 @@ public class DexDiffPatchInternal extends BasePatchInternal {
         }
 
         File classNFile = new File(dexFilePath, ShareConstants.CLASS_N_APK_NAME);
+        ShareTinkerLog.w(TAG,"-----verify merge classN.apk------case 3");
+        ShareTinkerLog.w(TAG,"classNFile length is : "+classNFile.length()/1024);
 
         // repack just more than one classN.dex
         if (classNDexInfo.isEmpty()) {
@@ -342,13 +347,16 @@ public class DexDiffPatchInternal extends BasePatchInternal {
             SharePatchFileUtil.safeDeleteFile(classNFile);
             Tinker.with(context).getPatchReporter().onPatchTypeExtractFail(patchFile, classNFile, classNFile.getName(), TYPE_CLASS_N_DEX);
         }
-        ShareTinkerLog.i(TAG, "merge classN dex file %s, result: %b, size: %d, use: %dms",
-            classNFile.getPath(), result, classNFile.length(), (System.currentTimeMillis() - start));
+        ShareTinkerLog.i(TAG, "merge classN dex file %s, result: %b, size: %d, use time: %dms",
+            classNFile.getPath(), result, classNFile.length()/1024, (System.currentTimeMillis() - start));
         return result;
     }
 
     private static boolean dexOptimizeDexFiles(Context context, List<File> dexFiles, String optimizeDexDirectory, final File patchFile, final PatchResult patchResult) {
         final Tinker manager = Tinker.with(context);
+
+
+        printDexFilesInfo(dexFiles);
 
         optFiles.clear();
 
@@ -388,12 +396,12 @@ public class DexDiffPatchInternal extends BasePatchInternal {
                       @Override
                       public void onStart(File dexFile, File optimizedDir) {
                           startTime = System.currentTimeMillis();
-                          ShareTinkerLog.i(TAG, "start to parallel optimize dex %s, size: %d", dexFile.getPath(), dexFile.length());
+                          ShareTinkerLog.i(TAG, "[dexOptimizeDexFiles] start to parallel optimize dex %s, size: %d", dexFile.getPath(), dexFile.length());
                       }
 
                       @Override
                       public void onSuccess(File dexFile, File optimizedDir, File optimizedFile) {
-                          ShareTinkerLog.i(TAG, "success to parallel optimize dex %s, opt file:%s, opt file size: %d, use time %d",
+                          ShareTinkerLog.i(TAG, "[dexOptimizeDexFiles] success to parallel optimize dex %s, opt file:%s, opt file size: %d, use time %d",
                               dexFile.getPath(), optimizedFile.getPath(), optimizedFile.length(), (System.currentTimeMillis() - startTime));
                           if (!optimizedFile.exists()) {
                               synchronized (anyOatNotGenerated) {
@@ -404,7 +412,7 @@ public class DexDiffPatchInternal extends BasePatchInternal {
 
                       @Override
                       public void onFailed(File dexFile, File optimizedDir, Throwable thr) {
-                          ShareTinkerLog.i(TAG, "fail to parallel optimize dex %s use time %d",
+                          ShareTinkerLog.i(TAG, "[dexOptimizeDexFiles] fail to parallel optimize dex %s use time %d",
                               dexFile.getPath(), (System.currentTimeMillis() - startTime));
                           failOptDexFile.add(dexFile);
                           throwable[0] = thr;
@@ -424,6 +432,20 @@ public class DexDiffPatchInternal extends BasePatchInternal {
             }
         }
         return true;
+    }
+
+    private static void printDexFilesInfo(List<File> dexFiles) {
+        if (dexFiles == null || dexFiles.isEmpty()) {
+            ShareTinkerLog.w(TAG, "dexFiles size is empty");
+            return;
+        }
+        for (File dexFile : dexFiles) {
+            ShareTinkerLog.i(TAG, "|-------printDexFilesInfo------↓");
+            ShareTinkerLog.i(TAG, "| file name : " + dexFile.getName());
+            ShareTinkerLog.i(TAG, "| file size : " + dexFile.length() / 1024);
+            ShareTinkerLog.i(TAG, "|-------printDexFilesInfo------↑");
+
+        }
     }
 
     /**

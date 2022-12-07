@@ -73,7 +73,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_DISABLE);
             return;
         }
-        //tinker
+        //tinker: patchDirectoryFile : /data/user/0/com.yxl.fish/tinker
         File patchDirectoryFile = SharePatchFileUtil.getPatchDirectory(app);
         if (patchDirectoryFile == null) {
             ShareTinkerLog.w(TAG, "tryLoadPatchFiles:getPatchDirectory == null");
@@ -90,7 +90,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             return;
         }
 
-        //tinker/patch.info
+        //tinker/patch.info : /data/user/0/com.yxl.fish/tinker/patch.info
         File patchInfoFile = SharePatchFileUtil.getPatchInfoFile(patchDirectoryPath);
         //check patch info file whether exist
         if (!patchInfoFile.exists()) {
@@ -99,7 +99,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             return;
         }
         //old = 641e634c5b8f1649c75caf73794acbdf
-        //new = 2c150d8560334966952678930ba67fa8
+        //new = 2c150d8560334966952678930ba67fa8  patchInfoLockFile : /data/user/0/com.yxl.fish/tinker/info.lock
         File patchInfoLockFile = SharePatchFileUtil.getPatchInfoLockFile(patchDirectoryPath);
         patchInfo = SharePatchInfo.readAndCheckPropertyWithLock(patchInfoFile, patchInfoLockFile);
         if (patchInfo == null) {
@@ -218,7 +218,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_VERSION_DIRECTORY_NOT_EXIST);
             return;
         }
-        //tinker/patch.info/patch-641e634c
+        //tinker/patch.info/patch-641e634c    实际：/data/user/0/com.yxl.fish/tinker/patch-5d8fb530
         String patchVersionDirectory = patchDirectoryPath + "/" + patchName;
 
         File patchVersionDirectoryFile = new File(patchVersionDirectory);
@@ -230,7 +230,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
             return;
         }
 
-        //tinker/patch.info/patch-641e634c/patch-641e634c.apk
+        //tinker/patch.info/patch-641e634c/patch-641e634c.apk ：patchVersionFile ： /data/user/0/com.yxl.fish/tinker/patch-5d8fb530/patch-5d8fb530.apk
         final String patchVersionFileRelPath = SharePatchFileUtil.getPatchVersionFile(version);
         File patchVersionFile = (patchVersionFileRelPath != null ? new File(patchVersionDirectoryFile.getAbsolutePath(), patchVersionFileRelPath) : null);
 

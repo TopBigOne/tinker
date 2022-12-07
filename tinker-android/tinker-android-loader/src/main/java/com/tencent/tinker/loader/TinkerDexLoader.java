@@ -107,6 +107,9 @@ public class TinkerDexLoader {
         // verify merge classN.apk
         if (isVmArt && !classNDexInfo.isEmpty()) {
             File classNFile = new File(dexPath + ShareConstants.CLASS_N_APK_NAME);
+            ShareTinkerLog.w(TAG,"-----verify merge classN.apk------case 1");
+            ShareTinkerLog.w(TAG,"classNFile length is : "+classNFile.length()/1024);
+
             long start = System.currentTimeMillis();
 
             if (application.isTinkerLoadVerifyFlag()) {
@@ -160,20 +163,20 @@ public class TinkerDexLoader {
                       @Override
                       public void onStart(File dexFile, File optimizedDir) {
                           start = System.currentTimeMillis();
-                          ShareTinkerLog.i(TAG, "start to optimize dex:" + dexFile.getPath());
+                          ShareTinkerLog.i(TAG, "[loadTinkerJars] start to optimize dex:" + dexFile.getPath());
                       }
 
                       @Override
                       public void onSuccess(File dexFile, File optimizedDir, File optimizedFile) {
                           // Do nothing.
-                          ShareTinkerLog.i(TAG, "success to optimize dex " + dexFile.getPath() + ", use time " + (System.currentTimeMillis() - start));
+                          ShareTinkerLog.i(TAG, "[loadTinkerJars] success to optimize dex " + dexFile.getPath() + ", use time " + (System.currentTimeMillis() - start));
                       }
 
                       @Override
                       public void onFailed(File dexFile, File optimizedDir, Throwable thr) {
                           parallelOTAResult[0] = false;
                           parallelOTAThrowable[0] = thr;
-                          ShareTinkerLog.i(TAG, "fail to optimize dex " + dexFile.getPath() + ", use time " + (System.currentTimeMillis() - start));
+                          ShareTinkerLog.i(TAG, "[loadTinkerJars] fail to optimize dex " + dexFile.getPath() + ", use time " + (System.currentTimeMillis() - start));
                       }
                   }
             );
@@ -245,6 +248,13 @@ public class TinkerDexLoader {
             }
         }
 
+        ShareTinkerLog.i(TAG, "|-----------------------classNDexInfo start-----------------------------↓" );
+        for (ShareDexDiffPatchInfo shareDexDiffPatchInfo : classNDexInfo) {
+            ShareTinkerLog.d(TAG,"| "+shareDexDiffPatchInfo.toString()+ " |");
+        }
+        ShareTinkerLog.i(TAG, "|-----------------------classNDexInfo end  -----------------------------↑" );
+
+
         if (isVmArt
             && (testInfo != null || !classNDexInfo.isEmpty())) {
             if (testInfo != null) {
@@ -275,6 +285,9 @@ public class TinkerDexLoader {
             }
             //check dex opt whether complete also
             File dexOptFile = new File(SharePatchFileUtil.optimizedPathFor(dexFile, optimizeDexDirectoryFile));
+            String dexOptFileName    = dexOptFile.getName();
+            ShareTinkerLog.d(TAG,"dexOptFileName :"+dexOptFileName);
+
             if (!SharePatchFileUtil.isLegalFile(dexOptFile)) {
                 if (SharePatchFileUtil.shouldAcceptEvenIfIllegal(dexOptFile)) {
                     continue;

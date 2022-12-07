@@ -44,7 +44,7 @@ import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.ReferenceType;
 import org.jf.dexlib2.builder.BuilderMutableMethodImplementation;
 import org.jf.dexlib2.dexbacked.DexBackedDexFile;
-import org.jf.dexlib2.dexbacked.DexBackedField;
+import org.jf.dexlib2.iface.Annotation;
 import org.jf.dexlib2.iface.DexFile;
 import org.jf.dexlib2.iface.Field;
 import org.jf.dexlib2.iface.Method;
@@ -453,18 +453,30 @@ public class DexDiffDecoder extends BaseDecoder {
                     continue;
                 }
 
+                Logger.dividerStart();
                 Logger.d("Class %s will be added into changed classes dex ...", classDef.getType());
+                Logger.dividerEnd();
 
                 List<BuilderField> builderFields = new ArrayList<>();
                 for (Field field : classDef.getFields()) {
-                    final BuilderField builderField = dexBuilder.internField(
-                            field.getDefiningClass(),
-                            field.getName(),
-                            field.getType(),
-                            field.getAccessFlags(),
-                            field.getInitialValue(),
-                            field.getAnnotations()
-                    );
+                    String                    definingClass = field.getDefiningClass();
+                    String                    name          = field.getName();
+                    String                    type          = field.getType();
+                    int                       accessFlags   = field.getAccessFlags();
+                    EncodedValue              initialValue  = field.getInitialValue();
+                    Set<? extends Annotation> annotations   = field.getAnnotations();
+
+                    Logger.dividerStart();
+                    Logger.d("definingClass : ", definingClass);
+                    Logger.d("name          : ", name);
+                    Logger.d("type          : ", type);
+                    Logger.d("accessFlags   : ", accessFlags);
+                    Logger.d("initialValue  : ", initialValue);
+                    Logger.d("annotations   : ", annotations);
+                    Logger.dividerEnd();
+
+
+                    final BuilderField builderField = dexBuilder.internField(definingClass, name, type, accessFlags, initialValue, annotations);
                     builderFields.add(builderField);
                 }
                 List<BuilderMethod> builderMethods = new ArrayList<>();
@@ -630,6 +642,15 @@ public class DexDiffDecoder extends BaseDecoder {
     }
 
     private void diffDexPairAndFillRelatedInfo(File oldDexFile, File newDexFile, RelatedInfo relatedInfo) {
+        Logger.d("----diffDexPairAndFillRelatedInfo info-------- ↓");
+        Logger.d("oldDexFile:");
+        Logger.d("         name   : " + oldDexFile.getName());
+        Logger.d("         length : " + oldDexFile.length() / 1024);
+        Logger.d("newDexFile:");
+        Logger.d("         name   : " + newDexFile.getName());
+        Logger.d("         length : " + newDexFile.length() / 1024);
+        Logger.d("----diffDexPairAndFillRelatedInfo info-------- ↑");
+
         File tempFullPatchDexPath = new File(config.mOutFolder + File.separator + TypedValue.DEX_TEMP_PATCH_DIR);
         final String dexName = getRelativeDexName(oldDexFile, newDexFile);
 
@@ -659,8 +680,10 @@ public class DexDiffDecoder extends BaseDecoder {
 
         relatedInfo.dexDiffFile = dexDiffOut;
         relatedInfo.dexDiffMd5 = MD5.getMD5(dexDiffOut);
-        Logger.d("\nGen %s patch file:%s, size:%d, md5:%s", dexName, relatedInfo.dexDiffFile.getAbsolutePath(), relatedInfo.dexDiffFile.length(), relatedInfo.dexDiffMd5);
+        Logger.dividerStart();
+        Logger.d("|-> Generate %s patch file:%s, size:%d, md5:%s", dexName, relatedInfo.dexDiffFile.getAbsolutePath(), relatedInfo.dexDiffFile.length(), relatedInfo.dexDiffMd5);
 
+        Logger.dividerEnd();
         File tempFullPatchedDexFile = new File(tempFullPatchDexPath, dexName);
         if (!tempFullPatchedDexFile.exists()) {
             ensureDirectoryExist(tempFullPatchedDexFile.getParentFile());
@@ -695,7 +718,7 @@ public class DexDiffDecoder extends BaseDecoder {
 
     private void addTestDex() throws IOException {
         Logger.d("-------DexDiffDecoder--------- step 4");
-        Logger.d("start add test dex");
+        Logger.d("-----add test dex-------start");
         //write test dex
         String dexMode = "jar";
         if (config.mDexRaw) {
@@ -710,10 +733,13 @@ public class DexDiffDecoder extends BaseDecoder {
 
         File dest = new File(config.mTempResultDir + "/" + TEST_DEX_NAME);
         FileOperation.copyResourceUsingStream(TEST_DEX_NAME, dest);
-        Logger.d("\nAdd test install result dex: %s, size:%d", dest.getAbsolutePath(), dest.length());
-        Logger.d("DexDecoder:write test dex meta file data: %s", meta);
+        Logger.dividerStart();
+        Logger.d(" Add test install result dex: %s, size:%d", dest.getAbsolutePath(), dest.length());
+        Logger.d(" DexDecoder:write test dex meta file data: %s", meta);
+        Logger.dividerEnd();
 
         metaWriter.writeLineToInfoFile(meta);
+        Logger.d("-----add test dex-------end");
     }
 
     private void checkCrossDexMovingClasses() {

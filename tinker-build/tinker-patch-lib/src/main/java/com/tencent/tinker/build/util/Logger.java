@@ -27,6 +27,8 @@ import java.io.IOException;
  */
 public class Logger {
     private static InfoWriter logWriter;
+    public static final String DIVIDER_START = "|------------------------------------------------------------------↓";
+    public static final String DIVIDER_END = "|--------------------------------------------------------------------↑";
 
     public static void initLogger(Configuration config) throws IOException {
         String logPath = config.mOutFolder + File.separator + TypedValue.FILE_LOG;
@@ -41,6 +43,14 @@ public class Logger {
 
     public static void d(final String msg) {
         Logger.d("%s", msg);
+    }
+
+    public static void dividerStart() {
+        Logger.d("%s", DIVIDER_START);
+    }
+
+    public static void dividerEnd() {
+        Logger.d("%s", DIVIDER_END);
     }
 
     public static void d(final String format, final Object... obj) {

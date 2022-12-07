@@ -19,6 +19,7 @@ package com.tencent.tinker.loader;
 
 import android.app.Application;
 import android.os.Build;
+import android.util.Log;
 
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.SharePatchFileUtil;
@@ -55,10 +56,10 @@ public class SystemClassLoaderAdder {
                                     boolean isProtectedApp, boolean useDLC) throws Throwable {
         ShareTinkerLog.i(TAG, "installDexes dexOptDir: " + dexOptDir.getAbsolutePath() + ", dex size:" + files.size());
         for (File file : files) {
-            ShareTinkerLog.i(TAG, "file info:  ");
-            ShareTinkerLog.i(TAG, "         path : " + file.getAbsolutePath());
-            ShareTinkerLog.i(TAG, "         name : " + file.getName());
-
+            ShareTinkerLog.i(TAG, "|-------------------------file info-----------------------------↓");
+            ShareTinkerLog.i(TAG, "| path : " + file.getAbsolutePath());
+            ShareTinkerLog.i(TAG, "| name : " + file.getName());
+            ShareTinkerLog.i(TAG, "|-------------------------file info-----------------------------↑");
         }
 
         if (!files.isEmpty()) {
@@ -138,6 +139,8 @@ public class SystemClassLoaderAdder {
     }
 
     private static List<File> createSortedAdditionalPathEntries(List<File> additionalPathEntries) {
+        ShareTinkerLog.i(TAG, "------ sort path file--------start");
+
         final List<File> result = new ArrayList<>(additionalPathEntries);
 
         final Map<String, Boolean> matchesClassNPatternMemo = new HashMap<>();
@@ -145,6 +148,7 @@ public class SystemClassLoaderAdder {
             final String name = file.getName();
             matchesClassNPatternMemo.put(name, ShareConstants.CLASS_N_PATTERN.matcher(name).matches());
         }
+        ShareTinkerLog.d(TAG, "matchesClassNPatternMemo: "+matchesClassNPatternMemo);
         Collections.sort(result, new Comparator<File>() {
             @Override
             public int compare(File lhs, File rhs) {
@@ -190,6 +194,7 @@ public class SystemClassLoaderAdder {
                 return lhsName.compareTo(rhsName);
             }
         });
+        ShareTinkerLog.i(TAG, "------ sort path file--------end");
 
         return result;
     }

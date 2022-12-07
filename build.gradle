@@ -37,8 +37,8 @@ ext {
 
 //    GROUP = 'com.tencent.tinker'
     GROUP = 'com.bianfeng.tinker'
-    VERSION_NAME = '2.3.3'
-    LIB_VERSION_NAME = '2.3.4'
+    VERSION_NAME = '2.3.6.1'
+    LIB_VERSION_NAME = '2.3.6.1'
 
     POM_DESCRIPTION = 'Tinker is a hot-fix solution library for Android, it supports dex, library and resources update without reinstalling apk.'
     POM_URL = 'https://github.com/Tencent/tinker'
@@ -51,7 +51,7 @@ ext {
     POM_DEVELOPER_ID = 'Tencent Wechat'
     POM_DEVELOPER_NAME = 'Tencent Wechat, Inc.'
 
-    LIB_REPO_URL = 'http://studio.bianfeng.com:8081/repository/javautil/'
+    LIB_REPO_URL = 'http://192.168.135.100:8081/repository/tinker/'
     NEXUS_USERNAME = 'linxcool'
     NEXUS_PASSWORD = 'hai123456'
 
