@@ -56,6 +56,7 @@ public class TinkerPatchService extends IntentService {
     public TinkerPatchService() {
         super("TinkerPatchService");
         setIntentRedelivery(true);
+
     }
 
     public static void runPatchService(final Context context, final String path) {

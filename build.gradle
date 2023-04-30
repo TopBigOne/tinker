@@ -56,7 +56,7 @@ ext {
     NEXUS_PASSWORD = 'hai123456'
 
     // 调试阶段，不将本地jar 文件 上传到maven；
-    IS_LOCAL_MAVEN = false
+    IS_LOCAL_MAVEN = true
 }
 
 apply from: rootProject.file('gradle/check.gradle')
